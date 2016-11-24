@@ -2,7 +2,7 @@
  * @authors     : qieguo
  * @date        : 2016/11/24
  * @version     : 1.0
- * @description : 数组、字符串相关
+ * @description : 数组、字符串相关；逻辑实现，不使用API等现成接口
  */
 
 
@@ -39,7 +39,8 @@ function indexOfArray(target, tool) {
  * @return      : 返回符合条件的子集数组，否则返回空数组
  * @description : 数组、字符串的子集位置查询
  */
-function dataFilter(target, tool) {
+
+function arrayFilter(target, tool) {
   return target.filter(function (item) {
     var keep = true;
     for (var key in tool) {
@@ -59,3 +60,29 @@ function dataFilter(target, tool) {
 // // var tool = {num: 20}
 // // var tool = {}
 // console.log(dataFilter(target, tool));
+
+
+/**
+ * 数组去重
+ * @param       : <Array> target 要去重的数组
+ * @return      : 返回去重后的子集数组
+ * @description : 数组去重
+ */
+function arrayUnique(target) {
+  var result = [target[0]];
+  for (var i = 1, targetLen = target.length; i < targetLen; i++) {
+    var isUnique = true;
+    for (var j = 0, resultLen = result.length; j < resultLen; j++) {
+      if (result[j] === target[i]) {
+        isUnique = false;
+        break
+      }
+    }
+    if (isUnique) {
+      result.push(target[i]);
+    }
+  }
+  return result;
+}
+var target = [1, 2, 3, 3, 2, '3', {},{}];
+console.log(arrayUnique(target));
