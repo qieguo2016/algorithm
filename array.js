@@ -11,7 +11,7 @@
  * @param       : <Array>||<String> target,目标字符串
  * @param       : <Array>||<String> tool,子串
  * @return      : <Number> 返回子串在目标中的位置，目标中找不到子串则返回-1
- * @description : 数组、字符串的子集位置查询
+ * @description : 数组、字符串的子集位置查询；可转成字符串用正则匹配，
  */
 
 function indexOfArray(target, tool) {
@@ -37,7 +37,7 @@ function indexOfArray(target, tool) {
  * @param       : <Array> target 要筛选的数据（数组）
  * @param       : <Object> tool  筛选条件（对象）
  * @return      : 返回符合条件的子集数组，否则返回空数组
- * @description : 数组、字符串的子集位置查询
+ * @description : 数组、字符串的子集位置查询；可用filter高阶函数代替循环
  */
 
 function arrayFilter(target, tool) {
@@ -69,8 +69,7 @@ function arrayFilter(target, tool) {
 /**
  * 数组去重
  * @param       : <Array> target 要去重的数组
- * @return      : 返回去重后的子集数组
- * @description : 数组去重
+ * @description : 数组去重；可用es6 set、正则、sort等实现
  */
 
 function arrayUnique(target) {
@@ -96,7 +95,6 @@ function arrayUnique(target) {
  * 数组归并排序
  * @param       : <Array> target 要归并排序的数组
  * @param       : <Array> tool 要归并排序的数组
- * @return      : 返回合并排序后的数组
  * @description : 归并排序，将两个已经排序的数组合并成一个数组;
  */
 
@@ -122,3 +120,36 @@ function combineArray(target, tool) {
 // var tool = [3, 6, 11, 30, 31, 80, 90, 97];
 // console.log(combineArray(target, tool));
 
+
+/**
+ * 数组最长无重复子串查找
+ * @param       : <Array> target 要查找的数组
+ * @description : 查找没有重复的最长子串
+ */
+function longestSubArray(target) {
+	var result = [];
+	var temp = [target[0]];
+	for (var i = 1, len = target.length; i < len; i++) {
+		var noRepeat = true;
+		for (var j = 0; j < temp.length; j++) {
+			if (target[i] === temp[j]) {
+				noRepeat = false;
+				if (result.length < temp.length) {
+					result = temp;
+				}
+				i = i - (temp.length - j) + 1;
+				temp = [target[i]];
+				break;
+			}
+		}
+		if (noRepeat) {
+			temp.push(target[i]);
+		}
+	}
+	if (result.length < temp.length) {
+		result = temp;
+	}
+	return result;
+}
+// var target = [1, 2, 3, 4, 3, 6, 8, 9, 10, 14, 15, 8, 9, 20, 30, 31, 32, 33, 34, 35, 36, 37];
+// console.log(longestSubArray(target));

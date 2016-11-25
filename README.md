@@ -12,4 +12,6 @@
 
 #### combineArray: 数组归并排序
 
+#### longestSubArray: 数组最长无重复子串查找
+
 
