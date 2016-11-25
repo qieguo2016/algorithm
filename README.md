@@ -1,6 +1,8 @@
 # 一些常见的算法实现
 
-## 数组相关
+- [数组相关](#Array)
+
+## Array
 
 #### indexOfArray：数组子串位置查询
 
@@ -8,5 +10,6 @@
 
 #### arrayUnique: 数组去重
 
+#### combineArray: 数组归并排序
 
 

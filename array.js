@@ -15,19 +15,19 @@
  */
 
 function indexOfArray(target, tool) {
-  for (var i = 0, targetLen = target.length; i < targetLen; i++) {
-    var isEqual = true;
-    for (var j = 0, toolLen = tool.length; j < toolLen; j++) {
-      if (target[i + j] !== tool[j]) {
-        isEqual = false;
-        break;
-      }
-    }
-    if (isEqual) {
-      return i;
-    }
-  }
-  return -1;
+	for (var i = 0, targetLen = target.length; i < targetLen; i++) {
+		var isEqual = true;
+		for (var j = 0, toolLen = tool.length; j < toolLen; j++) {
+			if (target[i + j] !== tool[j]) {
+				isEqual = false;
+				break;
+			}
+		}
+		if (isEqual) {
+			return i;
+		}
+	}
+	return -1;
 }
 // console.log(indexOfArray('abcdedfg', 'df'));
 
@@ -41,25 +41,29 @@ function indexOfArray(target, tool) {
  */
 
 function arrayFilter(target, tool) {
-  return target.filter(function (item) {
-    var keep = true;
-    for (var key in tool) {
-      if (typeof item[key] === 'undefined' || item[key] !== tool[key]) {
-        keep = false;
-        break;
-      }
-    }
-    return keep;
-  });
+	var result = [];
+	for (var i = 0, len = target.length; i < len; i++) {
+		var keep = true;
+		for (var key in tool) {
+			if (typeof target[i][key] === 'undefined' || target[i][key] !== tool[key]) {
+				keep = false;
+				break;
+			}
+		}
+		if (keep) {
+			result.push(target[i]);
+		}
+	}
+	return result;
 }
 // var target = [
 //   {name: 'Jack', age: 18, sex: 'f'},
 //   {name: 'Jack', age: 20},
 //   {name: 'Mike', age: 25}
 // ];
-// // var tool = {num: 20}
+// var tool = {age: 20}
 // // var tool = {}
-// console.log(dataFilter(target, tool));
+// console.log(arrayFilter(target, tool));
 
 
 /**
@@ -68,21 +72,53 @@ function arrayFilter(target, tool) {
  * @return      : 返回去重后的子集数组
  * @description : 数组去重
  */
+
 function arrayUnique(target) {
-  var result = [target[0]];
-  for (var i = 1, targetLen = target.length; i < targetLen; i++) {
-    var isUnique = true;
-    for (var j = 0, resultLen = result.length; j < resultLen; j++) {
-      if (result[j] === target[i]) {
-        isUnique = false;
-        break
-      }
-    }
-    if (isUnique) {
-      result.push(target[i]);
-    }
-  }
-  return result;
+	var result = [target[0]];
+	for (var i = 1, targetLen = target.length; i < targetLen; i++) {
+		var isUnique = true;
+		for (var j = 0, resultLen = result.length; j < resultLen; j++) {
+			if (result[j] === target[i]) {
+				isUnique = false;
+				break
+			}
+		}
+		if (isUnique) {
+			result.push(target[i]);
+		}
+	}
+	return result;
 }
-var target = [1, 2, 3, 3, 2, '3', {},{}];
-console.log(arrayUnique(target));
+// var target = [1, 2, 3, 3, 2, '3', {}, {}];
+// console.log(arrayUnique(target));
+
+/**
+ * 数组归并排序
+ * @param       : <Array> target 要归并排序的数组
+ * @param       : <Array> tool 要归并排序的数组
+ * @return      : 返回合并排序后的数组
+ * @description : 归并排序，将两个已经排序的数组合并成一个数组;
+ */
+
+function combineArray(target, tool) {
+	var result = [];
+	var i = 0, j = 0, targetLen = target.length, toolLen = tool.length;
+	while (i < targetLen && j < toolLen) {
+		if (target[i] < tool[j]) {
+			result.push(target[i++]);
+		} else {
+			result.push(tool[j++]);
+		}
+	}
+	while (i < targetLen) {
+		result.push(target[i++])
+	}
+	while (j < toolLen) {
+		result.push(tool[j++])
+	}
+	return result;
+}
+// var target = [1, 5, 11, 18, 25, 40, 100, 120];
+// var tool = [3, 6, 11, 30, 31, 80, 90, 97];
+// console.log(combineArray(target, tool));
+
