@@ -14,4 +14,6 @@
 
 #### longestSubArray: 数组最长无重复子串查找
 
+#### longestSubArrayHash: 利用哈希表去重的数组最长无重复子串查找
+
 
