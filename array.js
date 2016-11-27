@@ -71,7 +71,7 @@ function arrayFilter(target, tool) {
  */
 
 function arrayUnique(target) {
-  // 纯数组硬比较方式，这里要注意是否需要空对象{}的去重
+  // 纯数组硬比较方式，这里要注意是否需要空对象{}的去重，暂不处理
   var result = [target[0]];
   for (var i = 1, targetLen = target.length; i < targetLen; i++) {
     for (var j = 0, resultLen = result.length; j < resultLen; j++) {
