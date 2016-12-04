@@ -76,37 +76,42 @@ function arrayFilterTest() {
 
 function arrayUnique(target) {
   // 纯数组硬比较方式，这里要注意是否需要空对象{}的去重，暂不处理
-  var result = [target[0]];
-  for (var i = 1, targetLen = target.length; i < targetLen; i++) {
-    for (var j = 0, resultLen = result.length; j < resultLen; j++) {
-      if (result[j] === target[i]) {
-        break;    // j++是在循环体结束后自增，使用break则在自增前就跳出循环了
-      }
-    }
-    if (j === resultLen) {
-      result.push(target[i]);
-    }
-  }
+  // var result = [target[0]];
+  // for (var i = 1, targetLen = target.length; i < targetLen; i++) {
+  //   for (var j = 0, resultLen = result.length; j < resultLen; j++) {
+  //     if (result[j] === target[i]) {
+  //       break;    // j++是在循环体结束后自增，使用break则在自增前就跳出循环了
+  //     }
+  //   }
+  //   if (j === resultLen) {
+  //     result.push(target[i]);
+  //   }
+  // }
 
   // 对于去重这种无序的集合，可使用js对象的哈希特性来提高效率，但无法直接区分数字、字符，统一转为字符了
   // Note: 数据量少的情况下，哈希算法本身的复杂度就超过了循环对比，所以性能上反而更差。
-  // var result = [target[0]];
-  // var temp = {};
-  // temp[target[0]] = true;  // 要区分数字和字符，值可设为0(无),1(字符),2（数字），但每次判断都要根据当前值的类型去判断
-  // for (var i = 1, targetLen = target.length; i < targetLen; i++) {
-  //   if (typeof temp[target[i]] === 'undefined') {
-  //     result.push(target[i]);
-  //     temp[target[i]] = true;
-  //   }
-  // }
+  var result = [target[0]];
+  var temp = {};
+  temp[target[0]] = {};
+  temp[target[0]][(typeof target[0])] = 1;
+  // 要区分数字、字符、布尔值、null等类型，必须保存 temp[target[i]][(typeof target[i])] 作为标志
+  for (var i = 1, targetLen = target.length; i < targetLen; i++) {
+    if (!temp.hasOwnProperty(target[i]) || !temp[target[i]].hasOwnProperty(typeof target[i])) {
+      result.push(target[i]);
+      temp[target[i]] = {};
+      temp[target[i]][(typeof target[i])] = 1;
+    }
+  }
 
   return result;
 }
 function arrayUniqueTest() {
-  var target = [1, 2, 3, 3, '3', '3', true, false, true, {}, {}, null, null];
+  var target = [1, 2, 3, 3, '3', '3', 'length','__proto__','prototype', true, false, true, {}, {}, null, null];
+  // var target = [1, '1', true, 'true'];
+
   console.log('\narrayUnique test:\n', arrayUnique(target));
 }
-
+arrayUniqueTest();
 
 /**
  * 数组归并排序
@@ -138,7 +143,6 @@ function combineArrayTest() {
   var tool = [3, 6, 11, 30, 31, 80, 90, 97];
   console.log('\ncombineArray test:\n', combineArray(target, tool));
 }
-
 
 
 /**
@@ -216,5 +220,5 @@ function longestSubArrayTest() {
  * @description : 查重，输出重复次数最多的元素及其重复次数。
  */
 function countSubArray(target) {
-  
+
 }
