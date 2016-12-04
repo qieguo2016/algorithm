@@ -106,12 +106,10 @@ function arrayUnique(target) {
   return result;
 }
 function arrayUniqueTest() {
-  var target = [1, 2, 3, 3, '3', '3', 'length','__proto__','prototype', true, false, true, {}, {}, null, null];
+  var target = [1, 2, 3, 3, '3', '3', 'length', '__proto__', 'prototype', true, false, true, {}, {}, null, null];
   // var target = [1, '1', true, 'true'];
-
   console.log('\narrayUnique test:\n', arrayUnique(target));
 }
-arrayUniqueTest();
 
 /**
  * 数组归并排序
@@ -214,11 +212,42 @@ function longestSubArrayTest() {
   console.log('\nlongestSubArrayHash test:\n', longestSubArrayHash(target));
 }
 
+
 /**
- * 数组最长子串重复次数查找
+ * 数组重复次数最多的子串查找
  * @param       : <Array> target 要查找的数组
  * @description : 查重，输出重复次数最多的元素及其重复次数。
  */
-function countSubArray(target) {
 
+function countSubArray(target) {
+  var sub = {};
+  for (var i = 0, len = target.length; i < len; i++) {
+    if (typeof sub[target[i]] === 'undefined') {
+      sub[target[i]] = {
+        num: 1,
+        index: i
+      };
+    } else {
+      sub[target[i]].num++;
+    }
+  }
+
+  var maxNum = 0;
+  var max = null;
+  for (var obj in sub) {
+    if (maxNum < sub[obj].num) {
+      max = sub[obj];
+      maxNum = sub[obj].num;
+    }
+  }
+  return {
+    element: target[max.index],
+    index: max.index,
+    count: max.num
+  };
 }
+function countSubArrayTest() {
+  var target = [2, 2, 2, 4, 4, 11, 11, 5, 15, 11, 17, 11, 80, 11];
+  var target1 = ['qwe', 'as', 'dsfw', 'as', 'kou', 'lpi', 'as', 'jei', 'as'];
+  console.log('\ncountSubArrayTest test:\n', countSubArray(target1));
+};
