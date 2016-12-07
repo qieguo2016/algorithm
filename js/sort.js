@@ -54,12 +54,24 @@ console.log('selectSort test', selectSort([5, 3, 14, 65, 35, 90, 23]));
  */
 function quickSort(target) {
 
-  var div = target[0];
-  for (var i = 1; i < target.length; i++) {
-    
+  if (target.length < 2) { return target; }  // 先定义递归终止条件
+
+  var baseIndex = Math.floor(target.length / 2);
+  var left = [];
+  var right = [];
+
+  for (var i = 0; i < target.length; i++) {
+    if (i === baseIndex) {
+      continue;
+    }
+    if (target[i] < target[baseIndex]) {
+      left.push(target[i]);
+    } else {
+      right.push(target[i]);
+    }
   }
-
-
-  return target;
+  left = quickSort(left)
+  right = quickSort(right)
+  return left.concat(target[baseIndex], right); // 递归出口
 }
 console.log('quickSort test', quickSort([5, 3, 14, 65, 35, 90, 23]));
