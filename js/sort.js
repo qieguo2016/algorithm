@@ -12,7 +12,7 @@
  * @param       : <Array> target数组
  * @description : 冒泡排序，更贴切的形容应该是沉底排序，每一轮内循环就是最大数沉底了。
  */
-function bubble(target) {
+function bubbleSort(target) {
   var temp;
   for (var j = target.length; j > 0; j--) {
     for (var i = 0; i < j - 1; i++) {
@@ -25,14 +25,14 @@ function bubble(target) {
   }
   return target;
 }
-console.log('bubble test', bubble([5, 3, 14, 65, 35, 90, 23]));
+console.log('bubbleSort test', bubbleSort([5, 3, 14, 65, 35, 90, 23]));
 
 /**
  * 选择排序
  * @param       : <Array> target数组
- * @description : 选择排序，一次内循环只交换一次次序。
+ * @description : 一次内循环得到最大值，然后只交换一次次序，将最大值和内循环末尾对调。
  */
-function select(target) {
+function selectSort(target) {
   for (var j = target.length; j > 0; j--) {
     var maxIndex = 0;
     for (var i = 1; i < j; i++) {
@@ -44,4 +44,22 @@ function select(target) {
   }
   return target;
 }
-console.log('select test', select([5, 3, 14, 65, 35, 90, 23]));
+console.log('selectSort test', selectSort([5, 3, 14, 65, 35, 90, 23]));
+
+/**
+ * 快速排序
+ * @param       : <Array> target数组
+ * @description : 选择一个元素将数组分隔成两部分，比该元素小的放该元素前面，比该元素大放后面；
+ *                然后递归快速排序，最终得到一个排序后数组
+ */
+function quickSort(target) {
+
+  var div = target[0];
+  for (var i = 1; i < target.length; i++) {
+    
+  }
+
+
+  return target;
+}
+console.log('quickSort test', quickSort([5, 3, 14, 65, 35, 90, 23]));

@@ -30,7 +30,7 @@ js对象大家都用的很多，但其底层的哈希表特性你是否清楚？
 
 #### longestSubArrayHash: 利用哈希表去重的数组最长无重复子串查找
 
-### order [order.js](/js/order.js)
+### order [sort.js](/js/sort.js)
 
 #### bubble：冒泡排序
 #### select：选择排序
