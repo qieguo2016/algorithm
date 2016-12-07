@@ -6,7 +6,6 @@
  */
 
 'use strict';
-var stack = [];
 
 function pairTest(str) {
 	var open = {
@@ -38,3 +37,38 @@ function pairTest(str) {
 }
 
 console.log(pairTest('sdf\<asdsdfeesf{sdfefi{esadf{aefw}sdfw}sd}\>'));
+
+function waterfall(tasks, callback) {
+
+	// var err = null;
+	// var res = null;
+	// var current;
+	// while (fnArray.length !== 0) {
+	// 	current = fnArray.shift();
+	// 	current.apply(null, args);
+	// }
+
+	if (!tasks.length) return callback();
+	var taskIndex = 0;
+
+	function nextTask(args) {
+		if (taskIndex === tasks.length) {
+			return callback.apply(null, [null].concat(args));
+		}
+
+		var taskCallback = onlyOnce(rest(function(err, args) {
+			if (err) {
+				return callback.apply(null, [err].concat(args));
+			}
+			nextTask(args);
+		}));
+
+		args.push(taskCallback);
+
+		var task = tasks[taskIndex++];
+		task.apply(null, args);
+	}
+
+	nextTask([]);
+
+}
