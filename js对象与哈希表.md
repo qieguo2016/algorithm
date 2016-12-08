@@ -5,7 +5,7 @@
 js中的对象是基于哈希表结构的，而哈希表的查找时间复杂度为O(1)，所以很多人喜欢用对象来做映射，减少遍历循环。
 
 比如常见的数组去重：
-```
+```javascript
 function arrayUnique(target) {
   var result = [target[0]];
   var temp = {};
@@ -21,10 +21,14 @@ function arrayUnique(target) {
 ```
 这里使用了一个temp对象来保存出现过的元素，在循环中每次只需要判断当前元素是否在temp对象内即可判断出该元素是否已经出现过。
 
-上面的代码看起来没有问题，但有点经验的同学可能会说了，假如目标数组是[1,'1'], 这是2个不同类型元素，所以我们的期望值应该是原样输出的。但结果却是[1]。同理的还有true、null等，也就是说对象中的key在obj[key]时都被自动转成了字符串类型。所以，如果要区分出不同的类型的话，temp里面的属性值就不能是一个简单的true了，而是要包含几种数据类型。比如可以是：
+上面的代码看起来没有问题，但有点经验的同学可能会说了，假如目标数组是[1,'1'], 这是2个不同类型元素，所以我们的期望值应该是原样输出的。但结果却是[1]。
+同理的还有true、null等，也就是说对象中的key在obj[key]时都被自动转成了字符串类型。
+所以，如果要区分出不同的类型的话，temp里面的属性值就不能是一个简单的true了，而是要包含几种数据类型。比如可以是：
 
+```javascript
     temp[target[0]]={};
-    temp[target[0]][{typeof temp[target[i]])]=1;
+    temp[target[0]][(typeof temp[target[i]])] = 1;
+```
 
 在判断的时候除了要判断键是否存在之外，也要判断对应的数据类型计数是否大于1，以此来判断元素是否重复。
 
@@ -33,7 +37,7 @@ function arrayUnique(target) {
 
 1） 想办法去掉这个磨人的__proto__。显然，我们需要去掉原型链，那么可以使用`Object.create(null)`的方式来创建一个完全空白、无原型的空对象。
 
-2） 使用`!temp.hasOwnProperty(target[i])`代替`typeof temp[target[i]] === 'undefined'`，这时候代表原型链的__proto__属性就不能干扰到我们的结果判断了。
+~~2） 使用`!temp.hasOwnProperty(target[i])`代替`typeof temp[target[i]] === 'undefined'`，这时候代表原型链的__proto__属性就不能干扰到我们的结果判断了。~~  感谢@天生爱走神的指正，`obj.hasOwnProperty(__proto__)`会得到false，但是假如我们的目标数组里面包含`__proto__`的话，就不能对`__proto__`进行去重了。
 
 上面说了js中使用对象的一点小窍门，核心在于对象的`hashmap`结构，那`hashmap`是怎样的一个结构呢？且听小茄细细道来。
 

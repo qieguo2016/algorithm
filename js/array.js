@@ -15,20 +15,20 @@
  */
 
 function indexOfArray(target, tool) {
-  for (var i = 0, targetLen = target.length; i < targetLen; i++) {
-    for (var j = 0, toolLen = tool.length; j < toolLen; j++) {
-      if (target[i + j] !== tool[j]) {
-        break;    // j++是在循环体结束后自增，使用break则在自增前就跳出循环了
-      }
-    }
-    if (j === toolLen) {
-      return i;
-    }
-  }
-  return -1;
+	for (var i = 0, targetLen = target.length; i < targetLen; i++) {
+		for (var j = 0, toolLen = tool.length; j < toolLen; j++) {
+			if (target[i + j] !== tool[j]) {
+				break;    // j++是在循环体结束后自增，使用break则在自增前就跳出循环了
+			}
+		}
+		if (j === toolLen) {
+			return i;
+		}
+	}
+	return -1;
 }
 function indexOfArrayTest() {
-  console.log('indexOfArray test: ', indexOfArray('abcdedfg', 'e'));
+	console.log('indexOfArray test: ', indexOfArray('abcdedfg', 'e'));
 }
 
 
@@ -41,30 +41,30 @@ function indexOfArrayTest() {
  */
 
 function arrayFilter(target, tool) {
-  var result = [];
-  for (var i = 0, len = target.length; i < len; i++) {
-    var keep = true;
-    for (var key in tool) {
-      if (typeof target[i][key] === 'undefined' || target[i][key] !== tool[key]) {
-        keep = false;
-        break;
-      }
-    }
-    if (keep) {
-      result.push(target[i]);
-    }
-  }
-  return result;
+	var result = [];
+	for (var i = 0, len = target.length; i < len; i++) {
+		var keep = true;
+		for (var key in tool) {
+			if (typeof target[i][key] === 'undefined' || target[i][key] !== tool[key]) {
+				keep = false;
+				break;
+			}
+		}
+		if (keep) {
+			result.push(target[i]);
+		}
+	}
+	return result;
 }
 function arrayFilterTest() {
-  var target = [
-    {name: 'Jack', age: 18, sex: 'f'},
-    {name: 'Jack', age: 20},
-    {name: 'Mike', age: 25}
-  ];
-  console.log('\narrayFilter test: \n', arrayFilter(target, {age: 20}));
-  console.log('\narrayFilter test: \n', arrayFilter(target, {num: 10}));
-  console.log('\narrayFilter test: \n', arrayFilter(target, {}));
+	var target = [
+		{ name: 'Jack', age: 18, sex: 'f' },
+		{ name: 'Jack', age: 20 },
+		{ name: 'Mike', age: 25 }
+	];
+	console.log('\narrayFilter test: \n', arrayFilter(target, { age: 20 }));
+	console.log('\narrayFilter test: \n', arrayFilter(target, { num: 10 }));
+	console.log('\narrayFilter test: \n', arrayFilter(target, {}));
 }
 
 
@@ -75,41 +75,42 @@ function arrayFilterTest() {
  */
 
 function arrayUnique(target) {
-  // 纯数组硬比较方式，这里要注意是否需要空对象{}的去重，暂不处理
-  // var result = [target[0]];
-  // for (var i = 1, targetLen = target.length; i < targetLen; i++) {
-  //   for (var j = 0, resultLen = result.length; j < resultLen; j++) {
-  //     if (result[j] === target[i]) {
-  //       break;    // j++是在循环体结束后自增，使用break则在自增前就跳出循环了
-  //     }
-  //   }
-  //   if (j === resultLen) {
-  //     result.push(target[i]);
-  //   }
-  // }
+	// 纯数组硬比较方式，这里要注意是否需要空对象{}的去重，暂不处理
+	// var result = [target[0]];
+	// for (var i = 1, targetLen = target.length; i < targetLen; i++) {
+	//   for (var j = 0, resultLen = result.length; j < resultLen; j++) {
+	//     if (result[j] === target[i]) {
+	//       break;    // j++是在循环体结束后自增，使用break则在自增前就跳出循环了
+	//     }
+	//   }
+	//   if (j === resultLen) {
+	//     result.push(target[i]);
+	//   }
+	// }
 
-  // 对于去重这种无序的集合，可使用js对象的哈希特性来提高效率，但无法直接区分数字、字符，统一转为字符了
-  // Note: 数据量少的情况下，哈希算法本身的复杂度就超过了循环对比，所以性能上反而更差。
-  var result = [target[0]];
-  var temp = {};
-  temp[target[0]] = {};
-  temp[target[0]][(typeof target[0])] = 1;
-  // 要区分数字、字符、布尔值、null等类型，必须保存 temp[target[i]][(typeof target[i])] 作为标志
-  for (var i = 1, targetLen = target.length; i < targetLen; i++) {
-    if (!temp.hasOwnProperty(target[i]) || !temp[target[i]].hasOwnProperty(typeof target[i])) {
-      result.push(target[i]);
-      temp[target[i]] = {};
-      temp[target[i]][(typeof target[i])] = 1;
-    }
-  }
-
-  return result;
+	// 对于去重这种无序的集合，可使用js对象的哈希特性来提高效率，但无法直接区分数字、字符，统一转为字符了
+	// Note: 数据量少的情况下，哈希算法本身的复杂度就超过了循环对比，所以性能上反而更差
+	var result = [target[0]];
+	var temp = Object.create(null);
+	temp[target[0]] = {};
+	temp[target[0]][(typeof target[0])] = 1;
+	// 要区分数字、字符、布尔值、null等类型，必须保存 temp[target[i]][(typeof target[i])] 作为标志
+	for (var i = 1, targetLen = target.length; i < targetLen; i++) {
+		if (typeof temp[target[i]] === 'undefined' || !temp[target[i]].hasOwnProperty(typeof target[i])) {
+			result.push(target[i]);
+			temp[target[i]] = {};
+			temp[target[i]][(typeof target[i])] = 1;
+		}
+	}
+	return result;
 }
 function arrayUniqueTest() {
-  var target = [1, 2, 3, 3, '3', '3', 'length', '__proto__', 'prototype', true, false, true, {}, {}, null, null];
-  // var target = [1, '1', true, 'true'];
-  console.log('\narrayUnique test:\n', arrayUnique(target));
+	// var target = [1, 2, 3, 3, '3', '3', 'length', '__proto__', 'prototype', true, false, true, {}, {}, null, null];
+	var target = [1, 2, 3, 3, '3', '3', '__proto__', '__proto__', '__proto__', 'prototype', 'prototype', true, false, true, {}, {}, null, null];
+	// var target = [1, '1', true, 'true'];
+	console.log('\narrayUnique test:\n', arrayUnique(target));
 }
+
 
 /**
  * 数组归并排序
@@ -119,27 +120,27 @@ function arrayUniqueTest() {
  */
 
 function combineArray(target, tool) {
-  var result = [];
-  var i = 0, j = 0, targetLen = target.length, toolLen = tool.length;
-  while (i < targetLen && j < toolLen) {
-    if (target[i] < tool[j]) {
-      result.push(target[i++]);
-    } else {
-      result.push(tool[j++]);
-    }
-  }
-  while (i < targetLen) {
-    result.push(target[i++])
-  }
-  while (j < toolLen) {
-    result.push(tool[j++])
-  }
-  return result;
+	var result = [];
+	var i = 0, j = 0, targetLen = target.length, toolLen = tool.length;
+	while (i < targetLen && j < toolLen) {
+		if (target[i] < tool[j]) {
+			result.push(target[i++]);
+		} else {
+			result.push(tool[j++]);
+		}
+	}
+	while (i < targetLen) {
+		result.push(target[i++])
+	}
+	while (j < toolLen) {
+		result.push(tool[j++])
+	}
+	return result;
 }
 function combineArrayTest() {
-  var target = [1, 5, 11, 18, 25, 40, 100, 120];
-  var tool = [3, 6, 11, 30, 31, 80, 90, 97];
-  console.log('\ncombineArray test:\n', combineArray(target, tool));
+	var target = [1, 5, 11, 18, 25, 40, 100, 120];
+	var tool = [3, 6, 11, 30, 31, 80, 90, 97];
+	console.log('\ncombineArray test:\n', combineArray(target, tool));
 }
 
 
@@ -150,66 +151,66 @@ function combineArrayTest() {
  */
 
 function longestSubArray(target) {
-  var lastStart, lastLen, maxStart, maxLen;
-  lastStart = maxStart = 0;
-  lastLen = maxLen = 1;
+	var lastStart, lastLen, maxStart, maxLen;
+	lastStart = maxStart = 0;
+	lastLen = maxLen = 1;
 
-  for (var i = 1, len = target.length; i < len; i++) {
-    var noRepeat = true;
-    for (var j = lastStart; j < lastStart + lastLen; j++) {
-      if (target[i] === target[j]) {
-        noRepeat = false;
-        if (maxLen < lastLen) {
-          maxLen = lastLen;
-          maxStart = lastStart;
-        }
-        i = lastStart = i - (lastStart + lastLen - j) + 1;
-        lastLen = 1;
-        break;
-      }
-    }
-    if (noRepeat) {
-      lastLen++;
-    }
-  }
-  if (maxLen < lastLen) {
-    maxLen = lastLen;
-    maxStart = lastStart;
-  }
-  return target.slice(maxStart, maxLen + maxStart);
+	for (var i = 1, len = target.length; i < len; i++) {
+		var noRepeat = true;
+		for (var j = lastStart; j < lastStart + lastLen; j++) {
+			if (target[i] === target[j]) {
+				noRepeat = false;
+				if (maxLen < lastLen) {
+					maxLen = lastLen;
+					maxStart = lastStart;
+				}
+				i = lastStart = i - (lastStart + lastLen - j) + 1;
+				lastLen = 1;
+				break;
+			}
+		}
+		if (noRepeat) {
+			lastLen++;
+		}
+	}
+	if (maxLen < lastLen) {
+		maxLen = lastLen;
+		maxStart = lastStart;
+	}
+	return target.slice(maxStart, maxLen + maxStart);
 }
 // 哈希版本，js实现起来简单、在数据量大的情况下会有优势
 function longestSubArrayHash(target) {
-  var lastStart, lastLen, maxStart, maxLen, last = {};
-  lastStart = maxStart = 0;
-  lastLen = maxLen = 1;
-  last[target[lastStart]] = lastStart;
+	var lastStart, lastLen, maxStart, maxLen, last = {};
+	lastStart = maxStart = 0;
+	lastLen = maxLen = 1;
+	last[target[lastStart]] = lastStart;
 
-  for (var i = 1, len = target.length; i < len; i++) {
-    if (typeof last[target[i]] === 'undefined') {
-      lastLen++;
-      last[target[i]] = i;
-    } else {
-      if (maxLen < lastLen) {
-        maxLen = lastLen;
-        maxStart = lastStart;
-      }
-      i = lastStart = last[target[i]] + 1;
-      last = {};
-      last[target[lastStart]] = lastStart;
-      lastLen = 1;
-    }
-  }
-  if (maxLen < lastLen) {
-    maxLen = lastLen;
-    maxStart = lastStart;
-  }
-  return target.slice(maxStart, maxLen + maxStart);
+	for (var i = 1, len = target.length; i < len; i++) {
+		if (typeof last[target[i]] === 'undefined') {
+			lastLen++;
+			last[target[i]] = i;
+		} else {
+			if (maxLen < lastLen) {
+				maxLen = lastLen;
+				maxStart = lastStart;
+			}
+			i = lastStart = last[target[i]] + 1;
+			last = {};
+			last[target[lastStart]] = lastStart;
+			lastLen = 1;
+		}
+	}
+	if (maxLen < lastLen) {
+		maxLen = lastLen;
+		maxStart = lastStart;
+	}
+	return target.slice(maxStart, maxLen + maxStart);
 }
 function longestSubArrayTest() {
-  var target = [1, 2, 3, 4, 3, 6, 8, 9, 10, 14, 15, 8, 9];
-  console.log('\nlongestSubArray test:\n', longestSubArray(target));
-  console.log('\nlongestSubArrayHash test:\n', longestSubArrayHash(target));
+	var target = [1, 2, 3, 4, 3, 6, 8, 9, 10, 14, 15, 8, 9];
+	console.log('\nlongestSubArray test:\n', longestSubArray(target));
+	console.log('\nlongestSubArrayHash test:\n', longestSubArrayHash(target));
 }
 
 
@@ -220,34 +221,34 @@ function longestSubArrayTest() {
  */
 
 function countSubArray(target) {
-  var sub = {};
-  for (var i = 0, len = target.length; i < len; i++) {
-    if (typeof sub[target[i]] === 'undefined') {
-      sub[target[i]] = {
-        num: 1,
-        index: i
-      };
-    } else {
-      sub[target[i]].num++;
-    }
-  }
+	var sub = {};
+	for (var i = 0, len = target.length; i < len; i++) {
+		if (typeof sub[target[i]] === 'undefined') {
+			sub[target[i]] = {
+				num: 1,
+				index: i
+			};
+		} else {
+			sub[target[i]].num++;
+		}
+	}
 
-  var maxNum = 0;
-  var max = null;
-  for (var obj in sub) {
-    if (maxNum < sub[obj].num) {
-      max = sub[obj];
-      maxNum = sub[obj].num;
-    }
-  }
-  return {
-    element: target[max.index],
-    index: max.index,
-    count: max.num
-  };
+	var maxNum = 0;
+	var max = null;
+	for (var obj in sub) {
+		if (maxNum < sub[obj].num) {
+			max = sub[obj];
+			maxNum = sub[obj].num;
+		}
+	}
+	return {
+		element: target[max.index],
+		index: max.index,
+		count: max.num
+	};
 }
 function countSubArrayTest() {
-  var target = [2, 2, 2, 4, 4, 11, 11, 5, 15, 11, 17, 11, 80, 11];
-  var target1 = ['qwe', 'as', 'dsfw', 'as', 'kou', 'lpi', 'as', 'jei', 'as'];
-  console.log('\ncountSubArrayTest test:\n', countSubArray(target1));
+	var target = [2, 2, 2, 4, 4, 11, 11, 5, 15, 11, 17, 11, 80, 11];
+	var target1 = ['qwe', 'as', 'dsfw', 'as', 'kou', 'lpi', 'as', 'jei', 'as'];
+	console.log('\ncountSubArrayTest test:\n', countSubArray(target1));
 };
