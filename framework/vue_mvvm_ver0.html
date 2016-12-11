@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue MVVM模式的简单实现_原始版</title>
+</head>
+<body>
+<h3>Vue mvvm simple model</h3>
+<div id="app">
+  <h4>{{ title }}</h4>
+  <p>{{ message }}</p>
+  <input v-model="message">
+</div>
+
+
+<script>
+
+  function Vue(opt) {
+    var self = this;
+
+    var el = document.querySelector(opt.el || 'body');
+    var modelDoms = el.querySelectorAll('[v-model]');
+
+    this.$data = opt.data;
+    this.data = {};
+
+    function dataBind() {
+      for (var key in self.$data) {
+        Object.defineProperty(self.data, key, {
+          get: function () {
+            return self.$data[key];
+          },
+          set: function (newValue) {
+            self.$data[key] = newValue;
+          }
+        });
+      }
+    }
+
+    dataBind();
+  }
+
+  var vm = new Vue({
+    el: '#app',
+    data: {
+      message: 'input',
+      title: 'Hello Vue!'
+    }
+  });
+
+</script>
+</body>
+</html>
