@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Angular MVVM模式的简单实现_原始版</title>
+</head>
+<body>
+<h3>mvvm simple model</h3>
+<div>
+  <p>绑定测试： <span mv-bind="mvdata"></span></p>
+  <p>不同绑定测试： <span mv-bind="mvother"></span></p>
+  <input type="text" mv-model="mvdata" value="" onkeyup="update(this)"/>
+  <input type="text" mv-model="mvother" value="" onkeyup="update(this)"/>
+  <button onclick="resetdata()">数据更新视图</button>
+</div>
+
+<script>
+  var mv = {};
+  var bindDom = document.querySelectorAll('[mv-bind]');
+
+  function update(item) {
+    mv[item.getAttribute('mv-model')] = item.value;
+    apply();
+  }
+
+  function apply() {
+    bindDom.forEach(function (item) {
+      item.innerText = mv[item.getAttribute('mv-bind')];
+    });
+  }
+
+  function resetdata() {
+    mv['mvdata'] = 'reset';
+    apply();
+  }
+</script>
+</body>
+</html>
