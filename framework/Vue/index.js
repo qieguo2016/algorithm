@@ -3,6 +3,7 @@
  * @date        : 2016/12/12 0012
  * @version     : 1.0
  * @description :
+ * @reference   ：https://github.com/DMQ/mvvm#_2， https://github.com/fwing1987/MyVue
  */
 
 'use strict';
@@ -36,9 +37,8 @@ function defineReactive(data, key, val) {
         return;
       }
       console.log('setter');
-      val = newVal;   // setter本身已经做了赋值
-      // 触发通知
-      dep.notify();
+      val = newVal;  // setter本身已经做了赋值，val作为一个闭包变量，保存最新值
+      dep.notify();  // 触发通知
     },
   })
 }
