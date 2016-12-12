@@ -76,85 +76,99 @@ HTML：
 ```
 
 ```javascript
-function Scope(domEl) {
+function Scope(node, declareData, computeData) {
   this.$scope = {};
-  this.dom = domEl || document.body;
+  this.dom = node || document.body;
+  this.bindDom = null;
 
   var self = this;
-  var bindDom = null;
-  var modelDom = null;
-  var clickDom = null;
 
-  // 无依赖的数据、方法
-  function declareData() {
-    self.$scope.test = 'test';
-    self.$scope.resetdata = function () {
-      self.$scope.test = 'reset';
-    };
+  this.declareData = function () {
+    declareData.call(self);
+  };
+
+  this.computeData = function () {
+    computeData.call(self);
   }
 
-  // 有依赖的数据、方法
-  function computeData() {
-    self.$scope.dependence = 'dependence: ' + self.$scope.test;
-  }
+  this.init();
+}
 
-  function init() {
-    modelDom = self.dom.querySelectorAll('[ng-model]');
-    modelDom.forEach(function (el) {
-      // ng接管各种用户输入事件来更新绑定数据，最后再调用apply去更新视图
-      el.addEventListener('keyup', function (event) {
-        self.$scope[el.getAttribute('ng-model')] = el.value;
-        self.apply();
-      });
-      // el.addEventListener('keydown', function (e) {});
-      // el.addEventListener('change', function (e) {}); ……
+Scope.prototype.apply = function () {
+  var self = this;
+  // 计算依赖数据
+  this.computeData();
+  // 更新视图
+  this.bindDom.forEach(function (item) {
+    item.innerText = self.$scope[item.getAttribute('ng-bind')];
+  });
+}
+
+Scope.prototype.init = function () {
+  var self = this;
+  // watch过程，未做脏检查
+  var modelDom = self.dom.querySelectorAll('[ng-model]');
+  modelDom.forEach(function (el) {
+    // ng接管各种用户输入事件来更新绑定数据，然后计算整个模型数据，最后再调用apply去更新视图
+    el.addEventListener('keyup', function () {
+      self.$scope[el.getAttribute('ng-model')] = el.value;
+      self.apply();
     });
+    // el.addEventListener('keydown', function (e) {});
+    // el.addEventListener('change', function (e) {}); ……
+  });
 
-    // 绑定用户事件
-    clickDom = self.dom.querySelectorAll('[ng-click]');
-    clickDom.forEach(function (el) {
-      el.addEventListener('click', function (event) {
-        self.$scope[el.getAttribute('ng-click').replace('()', '')]();
-        self.apply();
-      })
-    });
+  // 绑定用户事件
+  var clickDom = self.dom.querySelectorAll('[ng-click]');
+  clickDom.forEach(function (el) {
+    el.addEventListener('click', function (event) {
+      self.$scope[el.getAttribute('ng-click').replace('()', '')]();
+      self.apply();
+    })
+  });
 
-    // 指定绑定数据的元素
-    bindDom = self.dom.querySelectorAll('[ng-bind]');
+  // 指定绑定数据的元素
+  self.bindDom = self.dom.querySelectorAll('[ng-bind]');
 
-    // 初始化数据
-    declareData();
+  // 初始化数据
+  self.declareData();
 
-    // 应用数据并更新视图
-    self.apply();
-  }
-
-  this.apply = function () {
-    // 计算依赖数据
-    computeData();
-
-    // 更新视图
-    bindDom.forEach(function (item) {
-      item.innerText = self.$scope[item.getAttribute('ng-bind')];
-    });
-  }
-
-  init();
+  // 应用数据并更新视图
+  self.apply();
 }
 
 function init() {
   var scopes = document.querySelectorAll('[ng-scope]');
-  scopes.forEach(function (el) {
-    new Scope(el);
-  })
+  new Scope(scopes[0], function () {
+    var self = this;
+    self.$scope.test = 'test';
+    self.$scope.resetdata = function () {
+      self.$scope.test = 'reset';
+    };
+  }, function () {
+    var self = this;
+    self.$scope.dependence = 'dependence: ' + self.$scope.test;
+  });
+
+  new Scope(scopes[1], function () {
+    var self = this;
+    self.$scope.test = '测试';
+    self.$scope.resetdata = function () {
+      self.$scope.test = '重置';
+    };
+  }, function () {
+    var self = this;
+    self.$scope.dependence = '依赖: ' + self.$scope.test;
+  });
+
+  //        new Scope(scopes[0]);
+
 }
 ```
 
 ### 改进二，增加脏值检查
 
 angular中并没有根据有无依赖来区分数据，而是使用脏检查和递归查找的方式来确认数据模型的更新。
-
-
 
 首先是更新机制。由于DOM操作的性能消耗比较大，所以要避免现在的全量更新，应该只更新差异点。因此这里要引入一个脏值检查机制，用来筛选出mv中被更新的值再去触发视图的更新。
 

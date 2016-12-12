@@ -8,14 +8,13 @@
 <h3>Vue mvvm simple model</h3>
 <div id="app">
     <h2 v-bind="title"></h2>
-    <p v-bind="message"></p>
+    <p v-bind="'message: '+message"></p>
     <input v-model="message">
     <button v-on:click="resetInput()">重置数据</button>
 </div>
 
 
 <script>
-
     function Vue(opt) {
         var self = this;
 
@@ -23,7 +22,7 @@
 
         var regNewline = /\n/g;
         var regText = /\{\{(.+?)\}\}/g;
-        var regDirective = /v-\w+/g;
+        var regDir = /^v-(\w+)\:?(\w+)\=\"(\w+)\"$/g;
 
         this.$data = opt.data;
         this.data = {};
@@ -45,7 +44,7 @@
         function parseAttr(node) {
             var attrs = node.attributes;
             for (var i = 0, l = attrs.length; i < l; i++) {
-                switch (attrs[i]) {
+                switch (regDir.exec(attrs[i])) {
                     case 'v-bind':
                         updateData(node, attrs[i]);
                         break;
@@ -56,6 +55,7 @@
                         bindEvent(node, attrs[i]);
                         break;
                     default :
+                        return null;
                 }
             }
         }
@@ -108,7 +108,7 @@
 
         // 通知更新
         function notify() {
-            parseHtml(root);
+
         }
 
         // 下面只定义了data这一层的setter、getter
@@ -131,6 +131,9 @@
         parseHtml(root);
     }
 
+    // parseHtml => compile(directive) => update => defineProperty => update
+
+
     var vm = new Vue({
         el     : '#app',
         data   : {
@@ -143,7 +146,6 @@
             }
         }
     });
-
 </script>
 </body>
 </html>
