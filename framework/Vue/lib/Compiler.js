@@ -8,6 +8,7 @@
 'use strict';
 
 const ignorableReg = /[^\t\n\r]*/;
+const textReg = /\{\{(.*)\}\}/g;
 
 function Compiler(options) {
 	// create node
@@ -18,7 +19,7 @@ function Compiler(options) {
 	// to documentFragment
 	if (this.$el) {
 		this.$fragment = nodeToFragment(this.$el);
-		this.compile();
+		this.compile(this.$fragment);
 		this.$el.appendChild(this.$fragment);
 	}
 }
@@ -37,7 +38,7 @@ function nodeToFragment(node) {
 
 function isIgnorable(node) {
 	// A comment node || a text node
-	return (node.nodeType == 8) || ((node.nodeType == 3) && !(ignorableReg.test(node.textContent)));
+	return (node.nodeType == 8) || ((node.nodeType == 3) && (ignorableReg.test(node.textContent)));
 }
 
 Compiler.prototype.compile = function (node) {
@@ -45,7 +46,7 @@ Compiler.prototype.compile = function (node) {
 	var self = this;
 	for (var i = 0, len = children.length; i < len; i++) {
 		var current = children[i];
-		if (current.childNodes.length >= 0) {
+		if (current.childNodes && current.childNodes.length) {
 			self.compile(current);
 		}
 		if (current.nodeType === 3) {
