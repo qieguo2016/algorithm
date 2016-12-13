@@ -7,7 +7,7 @@
 
 'use strict';
 
-const ignorableReg = /[^\t\n\r ]/;
+const ignorableReg = /[^\t\n\r]*/;
 
 function Compiler(options) {
 	// create node
@@ -26,7 +26,9 @@ function Compiler(options) {
 function nodeToFragment(node) {
 	var fragment = document.createDocumentFragment(), child;
 	while (child = node.firstChild) {
-		if (!isIgnorable(child)) {     // ignore '\n'
+		if (isIgnorable(child)) {     // delete '\n'
+			node.removeChild(child);
+		} else {
 			fragment.appendChild(child);
 		}
 	}
