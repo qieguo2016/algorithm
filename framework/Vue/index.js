@@ -8,7 +8,12 @@
 
 'use strict';
 
-// observer
+// 整体思路：
+// 1） Observer实现对vm的监视
+// 2） Compiler实现对模板的编译，将vm更新到视图上
+// 3） Watcher连接Observer与Compiler，订阅Observer消息后触发视图更新
+
+// Observer
 function observe(data) {
   // 设置开始和递归终止条件
   if (!data || typeof data !== 'object') {
@@ -43,14 +48,13 @@ function defineReactive(data, key, val) {
   })
 }
 
-// depend
+// dependence
 var Dep = function () {
   this.subs = {};
 };
 
 Dep.prototype.addSub = function (target) {
-  if (!this.subs[target.uid]) {
-    //防止重复添加
+  if (!this.subs[target.uid]) {  //防止重复添加
     this.subs[target.uid] = target;
   }
 };
@@ -61,7 +65,7 @@ Dep.prototype.notify = function (newVal) {
   }
 };
 
-// compile
+// Compiler
 function Compile() {
 
 }

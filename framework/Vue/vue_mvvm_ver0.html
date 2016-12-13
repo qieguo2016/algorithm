@@ -7,153 +7,77 @@
 <body>
 <h3>Vue mvvm simple model</h3>
 <div id="app">
-  <h2>{{ title }}</h2>
-  <p>message: {{ message }}</p>
-  <input v-model="message">
-  <button v-on:click="resetInput()">重置数据</button>
+  <h2 v-text="title"></h2>
+  <p v-text="name"></p>
+  <input v-model="name">
 </div>
 
-
 <script>
-  function Vue(opt) {
-    var self = this;
+function Vue(opt) {
+  this.data = opt.data || {};
+  this.$el = document.querySelector(opt.el) || document.body;
+  var textDom = this.$el.querySelectorAll('[v-text]');
+  var modelDom = this.$el.querySelectorAll('[v-model]');
 
-    var root = document.querySelector(opt.el || 'body');
+  var self = this;
 
-    var regNewline = /\n/g;
-    var regText = /\{\{(.+?)\}\}/g;
-    var regDir = /^v-(\w+)\:?(\w+)\=\"(\w+)\"$/g;
-
-    this.$data = opt.data;
-    this.data = {};
-    this.methods = opt.methods;
-
-    // 遍历root内元素
-    function parseHtml(node) {
-      var children = node.children;
-      for (var i = 0, l = children.length; i < l; i++) {
-        var child = children[i];
-        if (child.children.length !== 0) {
-          parseHtml(child);
-        }
-        parseAttr(child);
-      }
+  function observe(data) {
+    // 设置开始和递归终止条件
+    if (!data || typeof data !== 'object') {
+      return;
     }
-
-    // 解析指令
-    function parseAttr(node) {
-      var attrs = node.attributes;
-      for (var i = 0, l = attrs.length; i < l; i++) {
-        switch (regDir.exec(attrs[i])) {
-          case 'v-bind':
-            updateData(node, attrs[i]);
-            break;
-          case 'v-model':
-            bindModel(node, attrs[i]);
-            break;
-          case 'v-on:click':
-            bindEvent(node, attrs[i]);
-            break;
-          default :
-            return null;
-        }
-      }
-    }
-
-    // 双向绑定model
-    function bindModel(node, model) {
-      node.addEventListener('keyup', function () {
-        self.data[model] = node.value;
-      });
-    }
-
-    // 绑定事件
-    function bindEvent(node, method) {
-      node.addEventListener('click', function () {
-        self.methods[method].call(self);
-      });
-    }
-
-    // 展示数据
-    function updateData(node, data) {
-      node.textContent = self.data[data];
-    }
-
-    //        // 编译单个节点的 {{}}
-    //        function compileText(node) {
-    //            var text = node.textContent.trim().replace(regNewline, '');
-    //            var pieces = text.split(regText);
-    //            var matches = text.match(regText);
-    //            var tokens = [];
-    //
-    //            if (!pieces.length) {
-    //                return;
-    //            }
-    //
-    //            // 文本节点转化为常量和变量的组合表达式
-    //            // 'a {{b}} c' => '"a " + b + " c"'
-    //            pieces.forEach(function (piece) {
-    //                if (matches.indexOf('{{' + piece + '}}') > -1) {
-    //                    tokens.push(piece.trim());
-    //                } else if (piece) {
-    //                    tokens.push('"' + piece + '"');
-    //                }
-    //            });
-    //
-    //            with (self.$data) {
-    //                var res = eval(tokens.join('+'));
-    //            }
-    //            node.textContent = res;
-    //        }
-
-    // 通知更新
-    function notify() {
-
-    }
-
-    // 下面只定义了data这一层的setter、getter
-    function observeInit() {
-
-      var data = self.data;
-      for (var key in self.$data) {
-
-        Object.defineProperty(data, key, {
-          get: function () {
-            console.log('getter');
-            return self.$data[key];
-          },
-          set: function (newValue) {
-            console.log('setter');
-            if (self.$data[key] === newValue) {
-              return;
-            }
-            self.$data[key] = newValue;
-            notify();
-          }
-        });
-      }
-    }
-
-    observeInit();
-
-    //        parseHtml(root);
+    // 不能直接使用for循环，避开闭包陷阱
+    Object.keys(data).forEach(function (key) {
+      defineReactive(data, key, data[key]);
+    })
   }
 
-  // parseHtml => compile(directive) => update => defineProperty => update
+  function defineReactive(data, key, val) {
+    observe(val);   // 递归对象属性到基本类型为止
+    Object.defineProperty(data, key, {
+      enumerable  : true,    // 枚举
+      configurable: false, // 不可再配置
+      get         : function () {
+        console.log('getter');
+        return val;
+      },
+      set         : function (newVal) {
+        if (val === newVal) {
+          return;
+        }
+        console.log('setter');
+        val = newVal;  // setter本身已经做了赋值，val作为一个闭包变量，保存最新值
+        model2View();
+      },
+    })
+  }
 
+  function model2View() {
+    textDom.forEach(function (node) {
+      node.innerText = self.data[node.getAttribute('v-text')];
+    });
+  }
 
-  var vm = new Vue({
-    el: '#app',
-    data: {
-      message: 'message',
-      title: 'Hello Vue!'
-    },
-    methods: {
-      resetInput: function () {
-        this.data.input = 'reset message';
-      }
-    }
-  });
+  function watch() {
+    modelDom.forEach(function (node) {
+      node.addEventListener('keyup', function () {
+        self.data[node.getAttribute('v-model')] = node.value;
+      });
+    });
+  }
+
+  observe(this.data);
+  model2View();
+  watch();
+}
+
+var vm = new Vue({
+  el  : '#app',
+  data: {
+    name : 'Vue',
+    title: 'Hello Vue!',
+  },
+});
 </script>
 </body>
 </html>
