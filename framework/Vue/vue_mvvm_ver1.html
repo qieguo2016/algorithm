@@ -9,28 +9,38 @@
 <body>
 <h3>Vue mvvm simple model</h3>
 <div id="app">
-  <h2>{{ title + name + ", end!" }}</h2>
-  <p v-text="name"></p>
+  <h2>{{ title }}, {{ name + " end!" }}</h2>
+  <!--<p v-text="name"></p>-->
   <input v-model="name">
+  <input type="button" value="测试" v-on:click="test">
 </div>
 
 
 <script>
-  function Vue(opt) {
-    this.data = opt.data || {};
-    //    this.$el = document.querySelector(opt.el) || document.body;
+  'use strict';
+
+  function Vue(options) {
+    this.$data = options.data || {};
+    this.data = this.$data;
+    this.$options = options;
+    this.$el = document.querySelector(options.el) || document.body;
     var self = this;
-    //    new Observer(this.data);
-    new Compiler({el: opt.el});
+    new Observer(this.data);
+    new Compiler({el: options.el, vm: self});
   }
 
 
   var vm = new Vue({
-    el  : '#app',
+    el: '#app',
     data: {
-      name : 'Vue',
-      title: 'Hello, ',
+      name: 'Vue',
+      title: 'Hello',
     },
+    methods: {
+      test: function () {
+        this.data.name = 'Name'
+      }
+    }
   });
 
 </script>

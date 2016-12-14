@@ -5,8 +5,6 @@
  * @description : Observer
  */
 
-'use strict';
-
 function Observer(data) {
 	this.data = data;
 	this.observe(data);
