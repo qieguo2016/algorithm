@@ -76,9 +76,11 @@ Compiler.prototype = {
       }
     });
 
-    // 计算exp刷新文本，并将加入监听
-    node.textContent = this.parseExpression(tokens.join('+'));
-
+    // 计算exp刷新文本
+    var exp = tokens.join('+');
+    node.textContent = this.parseExpression(exp);
+    // 将exp加入监听列表 node, exp, vm, type
+    compileUtil.bindWatcher(node, exp, self.$vm, 'text')
   },
   // 编译节点元素
   compileNode: function (node) {
@@ -93,7 +95,6 @@ Compiler.prototype = {
           // 事件指令 v-on:click="handle"
           compileUtil.eventHandler(node, self.$vm, exp, dir);
         } else if (self.isAttrDirective(dir)) {
-          // @todo (v-bind:id='id')
           // compileUtil.attrBind(node, self.$vm, exp, dir);
         } else {
           // 普通指令 v-text="variable",v-model="variable"
@@ -121,25 +122,14 @@ Compiler.prototype = {
       return eval(exp);
     }
   },
-
-  bind: function (node, exp, update) {
-    //绑定view与model
-    //添加一个Watcher，监听exp相关的所有字段变化，具体方法可以看Watcher的注释
-    var updateFn = update + "Updater";
-    var watcher = new Watcher(exp, this.vm, function (newVal, oldVal) {
-      compileUtil[updateFn] && compileUtil[updateFn](node, newVal, oldVal);
-    });
-  },
 };
 
 
 // 指令处理
 var compileUtil = {
+  // model双向绑定，v-model
   model: function (node, vm, exp) {
-    // 先绑定后加监听
-    // this.bind(node, vm, exp, 'model');
     if (node.tagName.toLowerCase() === 'input') {
-      vm.bind(node, exp, "value");
       node.addEventListener('input', function (e) {
         // input是高频事件，要做节流
         var newValue = e.target.value;
@@ -157,6 +147,15 @@ var compileUtil = {
     }
   },
 
+  // 绑定监听者
+  bindWatcher: function (node, exp, vm, type) {
+    //绑定view与model
+    //添加一个Watcher，监听exp相关的所有字段变化，具体方法可以看Watcher的注释
+    var updateFn = updater[type];
+    var watcher = new Watcher(exp, vm, function (newVal, oldVal) {
+      updateFn && updateFn(node, newVal, oldVal);
+    });
+  },
   //////////////////////////////////////////////
 
   // 绑定attr，v-bind:class="cls"
@@ -164,4 +163,20 @@ var compileUtil = {
     var attr = dir.split(':')[1];
   },
 
+};
+
+
+var updater = {
+  text: function (node, newVal) {
+    node.textContent = typeof newVal === 'undefined' ? '' : newVal;
+  },
+  html: function (node, newVal) {
+    node.innerHTML = typeof newVal == 'undefined' ? '' : newVal;
+  },
+  value: function (node, newVal) {
+    node.value = newVal ? newVal : '';
+  },
+  attr: function (node, newVal, attrName) {
+    node[attrName] = typeof newVal == 'undefined' ? '' : newVal;
+  }
 };
