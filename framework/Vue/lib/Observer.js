@@ -2,7 +2,7 @@
  * @authors     : qieguo
  * @date        : 2016/12/13
  * @version     : 1.0
- * @description : Observer
+ * @description : Observer，实现对viewModel的监控，当发生变更时发出变更消息
  */
 
 function Observer(data) {
@@ -31,7 +31,7 @@ Observer.prototype.defineReactive = function (data, key, val) {
 		enumerable  : true,    // 枚举
 		configurable: false, // 不可再配置
 		get         : function () {
-			console.log('getter');
+			// console.log('getter dep', dep);
 			// 由于需要在闭包内添加watcher，所以通过Dep定义一个全局target属性，暂存watcher, 添加完移除
 			Dep.target && dep.addSub(Dep.target);
 			return val;
@@ -40,27 +40,10 @@ Observer.prototype.defineReactive = function (data, key, val) {
 			if (val === newVal) {
 				return;
 			}
-			console.log('setter');
+			// console.log('setter dep', dep);
 			val = newVal;  // setter本身已经做了赋值，val作为一个闭包变量，保存最新值
 			self.observe(newVal);
-			dep.notify(newVal);  // 触发通知
+			dep.notify();  // 触发通知
 		},
 	})
 }
-
-// dependence
-var Dep = function () {
-	this.subs = {};
-};
-
-Dep.prototype.addSub = function (target) {
-	if (!this.subs[target.uid]) {  //防止重复添加
-		this.subs[target.uid] = target;
-	}
-};
-
-Dep.prototype.notify = function (newVal) {
-	for (var uid in this.subs) {
-		this.subs[uid].update(newVal);
-	}
-};

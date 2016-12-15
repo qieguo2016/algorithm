@@ -5,40 +5,41 @@
   <title>Vue MVVM模式的简单实现_原始版</title>
   <script src="lib/Observer.js"></script>
   <script src="lib/Compiler.js"></script>
+  <script src="lib/Watcher.js"></script>
+  <script src="lib/dependence.js"></script>
+  <script src="lib/MVVM.js"></script>
 </head>
 <body>
 <h3>Vue mvvm simple model</h3>
 <div id="app">
-  <h2>{{ title }}, {{ name + " end!" }}</h2>
-  <!--<p v-text="name"></p>-->
+  <h3>{{ title }}</h3>
+  <p>{{"This is expression: "+ title }}, {{ name }}</p>
+  <p>Computed: {{computedData}}</p>
+  <p v-html="test"></p>
+  <p v-text="test"></p>
   <input v-model="name">
-  <input type="button" value="测试" v-on:click="test">
+  <input type="button" value="测试" v-on:click="resetInput">
 </div>
 
 
 <script>
-  'use strict';
 
-  function Vue(options) {
-    this.$data = options.data || {};
-    this.data = this.$data;
-    this.$options = options;
-    this.$el = document.querySelector(options.el) || document.body;
-    var self = this;
-    new Observer(this.data);
-    new Compiler({el: options.el, vm: self});
-  }
-
-
-  var vm = new Vue({
-    el: '#app',
-    data: {
-      name: 'Vue',
+  var vm = new MVVM({
+    el      : '#app',
+    data    : {
+      name : 'Vue',
       title: 'Hello',
+      test  : '\<button\>按钮\<\/button\>'
     },
-    methods: {
-      test: function () {
-        this.data.name = 'Name'
+    computed: {
+      computedData: function () {
+        return this.title + ', ' + this.name;
+      },
+    },
+    methods : {
+      resetInput: function () {
+        this.name = 'reset input';
+        this.test = 'reset-cls';
       }
     }
   });
