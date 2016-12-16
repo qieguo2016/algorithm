@@ -7,9 +7,9 @@
 
 var $uid = 0;
 
-function Watcher(exp, vm, callback) {
+function Watcher(exp, scope, callback) {
 	this.exp = exp;
-	this.vm = vm;
+	this.scope = scope;
 	this.callback = callback || function () {};
 
 	//初始化时，触发添加到监听队列
@@ -18,9 +18,9 @@ function Watcher(exp, vm, callback) {
 	this.update();
 }
 
-// 解析表达式 with+eval会将表达式中的变量绑定到vm模型中，从而实现对变量的取值
-function parseExpression(exp, vm) {
-	with (vm) {
+// 解析表达式 with+eval会将表达式中的变量绑定到vm模型中，从而实现对变量的取值，
+function computeExpression(exp, scope) {
+	with (scope) {
 		return eval(exp);
 	}
 }
@@ -28,7 +28,7 @@ function parseExpression(exp, vm) {
 Watcher.prototype = {
 	get   : function () {
 		Dep.target = this;
-		var value = parseExpression(this.exp, this.vm);  //执行的时候添加监听
+		var value = computeExpression(this.exp, this.scope);  //执行的时候添加监听
 		//在parseExpression的时候，with + eval会将表达式中的变量绑定到vm模型中，在求值的时候会调用相应变量的getter事件。
 		//由于设置了Dep.target，所以会执行observer的add.sub方法，从而创建了一个依赖链。
 		Dep.target = null;

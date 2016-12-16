@@ -11,10 +11,11 @@ function MVVM(options) {
 		? document.querySelector(options.el)
 		: options.el || document.body;
 	this.$options = options;
+	this.window = window;	  // 为了exp中全局对象（Math、location等）的计算取值
 
-	// 代理属性，直接用vm.variable访问data、method、computed内数据/方法
+	// 代理属性，直接用vm.props访问data、method、computed内数据/方法
 	this._proxy(options);
-	this._proxyMethod(options.methods);   // method不劫持getter/setter
+	this._proxyMethods(options.methods);   // method不劫持getter/setter
 
 	var ob = new Observer(this.$data);
 
@@ -23,8 +24,8 @@ function MVVM(options) {
 }
 
 MVVM.prototype = {
-	// 代理属性，直接用vm.variable访问data、computed内数据/方法
-	_proxy      : function (data) {
+	// 代理属性，直接用vm.props访问data、computed内数据/方法
+	_proxy       : function (data) {
 		var self = this;
 		var proxy = ['data', 'computed'];
 		proxy.forEach(function (item) {
@@ -33,7 +34,15 @@ MVVM.prototype = {
 					configurable: false,
 					enumerable  : true,
 					get         : function () {
-						return self.$data[key] || self.$options.computed[key].call(self);
+						// 注意不要返回与或表达式，会因类型转换导致出错
+						// return self.$data[key] || ((typeof self.$options.computed[key] !== 'undefined') && self.$options.computed[key].call(self));
+						if (typeof self.$data[key] !== 'undefined') {
+							return self.$data[key];
+						} else if (typeof self.$options.computed[key] !== 'undefined') {
+							return self.$options.computed[key].call(self);
+						} else {
+							return undefined;
+						}
 					},
 					set         : function (newVal) {
 						if (self.$data.hasOwnProperty(key)) {
@@ -47,22 +56,10 @@ MVVM.prototype = {
 		})
 	},
 	// method不劫持getter/setter，直接引用
-	_proxyMethod: function (methods) {
+	_proxyMethods: function (methods) {
 		var self = this;
 		Object.keys(methods).forEach(function (key) {
 			self[key] = self.$options.methods[key];
-			/*	Object.defineProperty(self, key, {
-			 configurable: false,
-			 enumerable  : true,
-			 get         : function () {
-			 return self.$options.methods[key];
-			 },
-			 set         : function (newFn) {
-			 if (typeof newFn === 'function') {
-			 self.$options.methods[key] = newFn;
-			 }
-			 }
-			 });*/
 		})
 	}
 }

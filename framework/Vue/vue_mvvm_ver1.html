@@ -10,26 +10,33 @@
   <script src="lib/MVVM.js"></script>
 </head>
 <body>
-<h3>Vue mvvm simple model</h3>
 <div id="app">
-  <h3>{{ title }}</h3>
+  <h3 class="cls" v-bind:id="name">{{ title }}</h3>
   <p>{{"This is expression: "+ title }}, {{ name }}</p>
-  <p>Computed: {{computedData}}</p>
-  <p v-html="test"></p>
-  <p v-text="test"></p>
+  <p>Computed: {{computedData}}： <span v-html="test"></span></span></p>
+  <h3>v-for</h3>
+  <ul>
+    <li v-for="item in items">
+      Parent.name: {{name}}; item: {{item.id}} - {{item.text}}
+    </li>
+  </ul>
+  <h3>model & event</h3>
   <input v-model="name">
   <input type="button" value="测试" v-on:click="resetInput">
 </div>
 
-
 <script>
-
   var vm = new MVVM({
     el      : '#app',
     data    : {
       name : 'Vue',
       title: 'Hello',
-      test  : '\<button\>按钮\<\/button\>'
+      test : '\<button\>按钮\<\/button\>',
+      items: [
+        {id: '10000', text: 'item_start'},
+        {id: '10001', text: 'item_10001'},
+        {id: '10002', text: 'item_end'}
+      ],
     },
     computed: {
       computedData: function () {
@@ -39,11 +46,11 @@
     methods : {
       resetInput: function () {
         this.name = 'reset input';
-        this.test = 'reset-cls';
+        this.test = '\<input type="date"\>';
+        this.items[1].text = 'changed text';
       }
     }
   });
-
 </script>
 </body>
 </html>

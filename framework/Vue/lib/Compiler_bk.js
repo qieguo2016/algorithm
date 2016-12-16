@@ -50,46 +50,32 @@ Compiler.prototype = {
 		var attrs = node.attributes,
 			self = this;
 		scope = scope || this.vm;
-		var forExp = '';
 		[].forEach.call(attrs, function (attr) {
 			var attrName = attr.name,
 				exp = attr.value;
 			if (self.isDirective(attrName)) {
 				var dir = attrName.substring(2);  // v-dir
-				// for最后编译
-				if (self.isForDirective(dir)) {
-					forExp = exp;
-				} else if (self.isEventDirective(dir)) {
+
+				if (self.isEventDirective(dir)) {
 					// 事件指令 v-on:click="handle"
 					compileUtil.eventHandler(node, scope, exp, dir);
+
 				} else if (self.isAttrDirective(dir)) {
 					// 属性指令 v-bind:id="id", v-bind:class="class"
 					compileUtil.attrBind(node, scope, exp, dir);
+
 				} else {
+
 					// 普通指令 v-text="variable",v-model="variable"
 					var key = dir + 'Handler';
 					compileUtil[key] && compileUtil[key](node, scope, exp, dir);
+
 				}
 				node.removeAttribute(attrName);
 			}
 		});
-
-		// for最后编译
-		if (forExp) {
-			var itemName = forExp.split('in')[0].replace(/\s/g, '')
-			var arrName = forExp.split('in')[1].replace(/\s/g, '');
-			var parentNode = node.parentNode;
-			scope[arrName].forEach(function (item) {
-				var cloneNode = node.cloneNode(true);
-				parentNode.insertBefore(cloneNode, node);
-				var forScope = Object.create(scope);  // 注意每次循环要生成一个新对象
-				forScope[itemName] = item;
-				self.compile(cloneNode, forScope);  // @FIXME 同样的编译应该有缓存机制
-			});
-			parentNode.removeChild(node);   // 去掉原始模板
-		} else {
-			self.compile(node, scope);
-		}
+		// @todo 增加编译控制（延迟编译），比如if和for
+		self.compile(node, scope);
 	},
 	// 判断是否指令： v-开头
 	isDirective: function (exp) {
@@ -127,7 +113,7 @@ function nodeToFragment(node) {
 // 忽略注释节点和换行节点
 function isIgnorable(node) {
 	// ignore comment node || a text node
-	var regIgnorable = /^[\t\n\r]+/;
+	var regIgnorable = /[^\t\n\r]*/;
 	return (node.nodeType == 8) || ((node.nodeType == 3) && (regIgnorable.test(node.textContent)));
 }
 
@@ -163,8 +149,8 @@ function parseStyleExp(text) {
  * 指令处理，指令主要有：
  * v-text： 表达式编译 @done
  * v-model：数据视图双向绑定 @done
- * v-on：事件绑定
- * v-bind：控制属性
+ * v-on：事件绑定 @todo 表达式执行
+ * v-bind：控制属性，@todo style和class是特例，区别对待
  * v-show：控制可视化属性，可归在v-bind内
  * v-if、v-for、v-else（暂不做）：控制流，根据当前值会对子元素造成影响：
  * v-html： html编译，要做一定的xss拦截
@@ -192,6 +178,7 @@ var compileUtil = {
 	modelHandler: function (node, scope, exp) {
 		if (node.tagName.toLowerCase() === 'input') {
 			this.bindWatcher(node, scope, exp, 'value');
+			// @FIXME input是高频事件，要做节流?
 			node.addEventListener('input', function (e) {
 				node.isInputting = true;   // 由于上面绑定了自动更新，循环依赖了，中文输入法不能用。这里加入一个标志避开自动update
 				var newValue = e.target.value;
@@ -219,7 +206,7 @@ var compileUtil = {
 	// 绑定attr，v-bind:class="cls"
 	attrBind: function (node, scope, exp, dir) {
 		var attr = dir.split(':')[1];
-		// @todo 分class、style、普通属性三大类处理，计算attr的方式不同
+		// @todo 分class、style、普通属性三大类处理，分别求attr
 		switch (attr) {
 			case 'class':
 				exp = parseClassExp(exp);
