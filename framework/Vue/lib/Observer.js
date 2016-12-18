@@ -10,7 +10,7 @@ function Observer(data) {
 	this.observe(data);
 }
 
-// Observer
+// Observer //@todo 未对数组监控，可以劫持Array的原型实现
 Observer.prototype.observe = function (data) {
 	var self = this;
 	// 设置开始和递归终止条件
@@ -20,7 +20,7 @@ Observer.prototype.observe = function (data) {
 	// 不能直接使用for循环，避开闭包陷阱
 	Object.keys(data).forEach(function (key) {
 		self.defineReactive(data, key, data[key]);
-	})
+	});
 }
 
 Observer.prototype.defineReactive = function (data, key, val) {
