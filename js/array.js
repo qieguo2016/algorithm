@@ -280,3 +280,25 @@ function queryFirstUniqueItemTest() {
   console.log('ret: ', ret);
   console.log('ret: ', !ret);
 }
+
+// 给一个数组如：[[“a”,”b”,”c”],[“d”,”e”],…..]得到[ad,ae,bd,be,cd,ce]
+function mapConcat(target) {
+  var res = target.reduce(function (pre, next) {
+    var ret = [];
+    pre.forEach(function (preItem) {
+      next.forEach(function (nextItem) {
+        if (preItem !== nextItem) {  // 去掉aa这种情况
+          ret.push(preItem + nextItem);
+        }
+      })
+    })
+    return ret;
+  })
+  return res;
+}
+function mapConcatTest() {
+  // var target = [['a', 'b', 'c'], ['d', 'e'], ['f', 'g', 'h'], ['j', 'm']];
+  var target = [['a', 'b', 'c'], ['a', 'b']];
+  console.log('\nmapConcatTest:\n', mapConcat(target));
+}
+mapConcatTest()
