@@ -25,7 +25,11 @@ function bubbleSort(target) {
   }
   return target;
 }
-console.log('bubbleSort test', bubbleSort([5, 3, 14, 65, 35, 90, 23]));
+function bubbleSortTest() {
+  var target = [5, 3, 14, 65, 35, 90, 23];
+  console.log('bubbleSort test', bubbleSort(target));
+}
+// bubbleSortTest()
 
 /**
  * 选择排序
@@ -44,7 +48,11 @@ function selectSort(target) {
   }
   return target;
 }
-console.log('selectSort test', selectSort([5, 3, 14, 65, 35, 90, 23]));
+function selectSortTest() {
+  var target = [5, 3, 14, 65, 35, 90, 23];
+  console.log('selectSort test', selectSort(target));
+}
+// selectSortTest()
 
 /**
  * 快速排序
@@ -74,4 +82,46 @@ function quickSort(target) {
   right = quickSort(right)
   return left.concat(target[baseIndex], right); // 递归出口
 }
-console.log('quickSort test', quickSort([5, 3, 14, 65, 35, 90, 23]));
+function quickSortTest() {
+  var target = [5, 3, 14, 65, 35, 90, 23];
+  console.log('quickSort test', quickSort(target));
+}
+// quickSortTest()
+
+/**
+ * 归并排序
+ * @param       : <Array> target 要归并排序的数组
+ * @description : 归并排序，将数组递归分割成两个子数组直至数组只有一个元素，然后将这两个有序数组合并成一个有序数组;
+ */
+function mergeSortedArray(arrA, arrB) {
+  var result = [];
+  var i = 0, j = 0, targetLen = arrA.length, toolLen = arrB.length;
+  while (i < targetLen && j < toolLen) {
+    if (arrA[i] < arrB[j]) {
+      result.push(arrA[i++]);
+    } else {
+      result.push(arrB[j++]);
+    }
+  }
+  while (i < targetLen) {
+    result.push(arrA[i++])
+  }
+  while (j < toolLen) {
+    result.push(arrB[j++])
+  }
+  return result;
+}
+function mergeSort(target) {
+  if (target.length === 1) {
+    return target;
+  }
+  var mid = Math.floor(target.length / 2);
+  var left = target.slice(0, mid);
+  var right = target.slice(mid);
+  return mergeSortedArray(mergeSort(left), mergeSort(right));
+}
+function mergeSortTest() {
+  var target = [1, 25, 100, 8, 90, 11, 10];
+  console.log('\nmergeSort test:\n', mergeSort(target));
+}
+// mergeSortTest()
