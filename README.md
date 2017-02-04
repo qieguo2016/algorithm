@@ -21,6 +21,7 @@ js中可以通过对象的哈希结构来实现树结构，两种数据结构结
 ## 算法部分
 
 - [数组相关](#array)
+
 - [排序相关](#order)
 
 ### Array [array.js](/js/array.js)
@@ -40,6 +41,7 @@ js中可以通过对象的哈希结构来实现树结构，两种数据结构结
 ### sort [sort.js](/js/sort.js)
 
 #### bubble：冒泡排序
+
 #### select：选择排序
 
 
