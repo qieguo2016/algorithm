@@ -19,7 +19,7 @@ function getStepMethodNum(steps, max) {
     return 1;
   }
   if (steps >= max) {
-    //如果steps大于每步最大台阶数，则设置第一步为m之内的一个台阶数，然后递归循环
+    //如果steps大于每步最大台阶数，则设置第一步为max之内的一个台阶数，然后递归循环
     for (var i = 1; i <= max; i++) {
       sumStep += getStepMethodNum(steps - i, max);
     }
