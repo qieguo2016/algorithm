@@ -5,31 +5,29 @@
  */
 
 // 节流throttle，多次触发但只执行一部分，（恒时间间距执行）
-function throttle(fn, delay) {
-	var timer = null;
-	return function () {
-		var ctx = this;
-		var args = this.arguments;
-		if (!timer) {
-			timer = setTimeout(function () {
-				timer = null;
-				fn.apply(ctx, args);
-			}, delay);
-		}
-	}
+function throttle(method, threshold, ctx) {
+  let timer = null;
+  return function () {
+    const args = [].slice.call(arguments);
+    if (!timer) {
+      timer = setTimeout(function () {
+        timer = null;
+        method.apply(ctx, args);
+      }, threshold);
+    }
+  }
 }
 
 // 防抖debounce, 多次触发但只执行一次，（时间差大于阈值才执行）
-function debounce(fn, delay) {
-	var timer = null;
-	return function () {
-		var ctx = this;
-		var args = this.arguments;
-		clearTimeout(timer)
-		timer = setTimeout(function () {
-			fn.apply(ctx, args);
-		}, delay);
-	}
+function debounce(method, threshold, ctx) {
+  let timer = null;
+  return function () {
+    const args = [].slice.call(arguments);
+    timer && clearTimeout(timer);
+    timer = setTimeout(function () {
+      method.apply(ctx, args);
+    }, threshold);
+  };
 }
 
 
