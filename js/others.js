@@ -32,4 +32,44 @@ function debounce(fn, delay) {
 	}
 }
 
+// 轮循函数
+// usage: wait(fn.bind(ctx, ...args), 10000);
+function wait(fn, timeout, tick) {
+	timeout = timeout || 5000;
+	tick = tick || 250;
+	var timeoutTimer = null;
+	var execTimer = null;
+
+	return new Promise(function (resolve, reject) {
+
+		timeoutTimer = setTimeout(function () {
+			clearTimeout(execTimer);
+			reject(new Error('polling fail because timeout'));
+		}, timeout);
+
+		tickHandler(fn);
+
+		function tickHandler(fn) {
+			var ret = fn();
+			if (!ret) {
+				execTimer = setTimeout(function () {
+					tickHandler(fn);
+				}, tick)
+			} else {
+				clearTimeout(timeoutTimer);
+				resolve();
+			}
+		}
+	});
+}
+
+var n = 1;
+wait(function () {
+	console.log(n++);
+	return n > 10;
+}, 2000, 300).then(function () {
+	console.log('===== end ====')
+}).catch(function (err) {
+	console.error('error', err);
+});
 
