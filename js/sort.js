@@ -14,9 +14,9 @@
  */
 function bubbleSort(target) {
   var temp;
-  for (var j = target.length; j > 0; j--) {
-    for (var i = 0; i < j - 1; i++) {
-      if (target[i] > target[i + 1]) {
+  for(var j = target.length; j > 0; j--) {
+    for(var i = 0; i < j - 1; i++) {
+      if(target[i] > target[i + 1]) {
         temp = target[i];
         target[i] = target[i + 1];
         target[i + 1] = temp;
@@ -37,9 +37,9 @@ function bubbleSortTest() {
  * @description : 一次内循环得到最大值，然后只交换一次次序，将最大值和内循环末尾对调。
  */
 function selectSort(target) {
-  for (var j = target.length; j > 0; j--) {
+  for(var j = target.length; j > 0; j--) {
     var maxIndex = 0;
-    for (var i = 1; i < j; i++) {
+    for(var i = 1; i < j; i++) {
       maxIndex = target[maxIndex] > target[i] ? maxIndex : i;
     }
     var temp = target[j - 1];
@@ -61,18 +61,18 @@ function selectSortTest() {
  *                然后递归快速排序，最终得到一个排序后数组
  */
 function quickSort(target) {
-
-  if (target.length < 2) { return target; }  // 先定义递归终止条件
+  // 先定义递归终止条件
+  if(target.length < 2) { return target; }
 
   var baseIndex = Math.floor(target.length / 2);
   var left = [];
   var right = [];
 
-  for (var i = 0; i < target.length; i++) {
-    if (i === baseIndex) {
+  for(var i = 0; i < target.length; i++) {
+    if(i === baseIndex) {
       continue;
     }
-    if (target[i] < target[baseIndex]) {
+    if(target[i] < target[baseIndex]) {
       left.push(target[i]);
     } else {
       right.push(target[i]);
@@ -82,9 +82,40 @@ function quickSort(target) {
   right = quickSort(right)
   return left.concat(target[baseIndex], right); // 递归出口
 }
+
+
+/**
+ * 快速排序
+ * @param       : <Array> arr
+ * @description : 上面的快排每次都开辟一个数组，浪费空间。常规做法是两边查找到中间，两两交换位置
+ */
+function quickSortNormal(arr, left, right) {
+  // 先定义递归终止条件
+  if(left >= right) { return arr; }
+
+  var base = arr[left];
+  var i = left;
+  var j = right;
+  while(i < j) {
+    while(i < j && arr[j] >= base) {
+      j--;
+    }
+    arr[i] = arr[j];
+    while(i < j && arr[i] <= base) {
+      i++;
+    }
+    arr[j] = arr[i];
+  }
+  arr[i] = base;
+  quickSortNormal(arr, left, i - 1);
+  quickSortNormal(arr, i + 1, right);
+  return arr;
+}
+
 function quickSortTest() {
-  var target = [5, 3, 14, 65, 35, 90, 23];
+  var target = [5, 3, 14, 65, 35, 90, 23, 19, 5, 100];
   console.log('quickSort test', quickSort(target));
+  console.log('quickSort test', quickSortNormal(target, 0, target.length - 1));
 }
 // quickSortTest()
 
@@ -96,23 +127,23 @@ function quickSortTest() {
 function mergeSortedArray(arrA, arrB) {
   var result = [];
   var i = 0, j = 0, targetLen = arrA.length, toolLen = arrB.length;
-  while (i < targetLen && j < toolLen) {
-    if (arrA[i] < arrB[j]) {
+  while(i < targetLen && j < toolLen) {
+    if(arrA[i] < arrB[j]) {
       result.push(arrA[i++]);
     } else {
       result.push(arrB[j++]);
     }
   }
-  while (i < targetLen) {
+  while(i < targetLen) {
     result.push(arrA[i++])
   }
-  while (j < toolLen) {
+  while(j < toolLen) {
     result.push(arrB[j++])
   }
   return result;
 }
 function mergeSort(target) {
-  if (target.length === 1) {
+  if(target.length === 1) {
     return target;
   }
   var mid = Math.floor(target.length / 2);
