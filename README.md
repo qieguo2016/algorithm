@@ -42,13 +42,21 @@ js中可以通过对象的哈希结构来实现树结构，两种数据结构结
 
 ### sort [sort.js](/js/sort.js)
 
-#### bubble：冒泡排序
+#### [bubbleSort：冒泡排序](/js/sort.js#L20)
 
-#### select：选择排序
+#### [selectSort：选择排序](/js/sort.js#L36)
 
-#### quick：快速排序
+#### [straightInsertionSort: 直接插入排序](/js/sort.js#L52)
 
-#### merge：归并排序
+#### [shellSort：希尔排序](/js/sort.js#L72)
+
+#### [quickSort：快速排序](/js/sort.js#L101)
+
+#### [inPlaceQuickSort：原地快速排序](/js/sort.js#L127)
+
+#### [mergeSort：归并排序](/js/sort.js#L159)
+
+#### [heapSort：堆排序](/js/sort.js#L192)
 
 
 

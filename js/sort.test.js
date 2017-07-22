@@ -40,10 +40,10 @@ function compareArray(a, b) {
   return true;
 }
 
+// 以冒泡排序为基准测试
 function main() {
-  const origin = makeRandomArray(20);
+  const origin = makeRandomArray(30);
   let sorted;
-
   for(let name in sorts) {
     logger.info(`======== ${name} ========`);
     if(!sorted) {
@@ -51,8 +51,13 @@ function main() {
       isArraySort(sorted);
     } else {
       const s = sorts[name](origin.slice(0));
-      compareArray(sorted, s)
-        ? logger.ok('success: ' + JSON.stringify(s))
+      let isOk;
+      if(name === 'topSortViaHeap') {
+        isOk = compareArray(sorted.slice(0, 10), s);
+      } else {
+        isOk = compareArray(sorted, s);
+      }
+      isOk ? logger.ok('success: ' + JSON.stringify(s))
         : logger.error('fail: ' + JSON.stringify(s))
     }
   }
