@@ -142,7 +142,7 @@ index=Hi（key）  ,  i=1，2，…，n
 
 关于js对象与哈希相关的东西就说到这里了，用文字总结一下之后发现很多知识点都明确了很多，尤其是要用最平白的语言组织出来，就必须有自己的理解才行。任何一个细节都可以看出很多东西，谨以此文与君共勉！
 
-  [1]: /img/bVGp74
-  [2]: /img/bVGqaW
-  [3]: /img/bVGqbI
-  [4]: /img/bVGqdH
+  [1]: /resource/object__001.jpg
+  [2]: /resource/object__002.jpg
+  [3]: /resource/array__003.jpg
+  [4]: /resource/hashmap__004.jpg
