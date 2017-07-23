@@ -24,39 +24,59 @@ js中可以通过对象的哈希结构来实现树结构，两种数据结构结
 
 - [数组相关](#array)
 
-- [排序相关](#order)
+- [排序相关](#sort)
+
+- [递归相关](#recursive)
+
+- [其他](#other)
 
 ### Array [array.js](/js/array.js)
 
-#### indexOfArray：数组子串位置查询
+- indexOfArray：数组子串位置查询
 
-#### arrayFilter：数组筛选
+- arrayFilter：数组筛选
 
-#### arrayUnique: 数组去重
+- arrayUnique: 数组去重
 
-#### combineArray: 数组归并排序
+- combineArray: 数组归并排序
 
-#### longestSubArray: 数组最长无重复子串查找
+- longestSubArray: 数组最长无重复子串查找
 
-#### longestSubArrayHash: 利用哈希表去重的数组最长无重复子串查找
+- longestSubArrayHash: 利用哈希表去重的数组最长无重复子串查找
 
 ### sort [sort.js](/js/sort.js)
 
-#### [bubbleSort：冒泡排序](/js/sort.js#L20)
+- [bubbleSort：冒泡排序](/js/sort.js#L20)
 
-#### [selectSort：选择排序](/js/sort.js#L36)
+- [selectSort：选择排序](/js/sort.js#L36)
 
-#### [straightInsertionSort: 直接插入排序](/js/sort.js#L52)
+- [straightInsertionSort: 直接插入排序](/js/sort.js#L52)
 
-#### [shellSort：希尔排序](/js/sort.js#L72)
+- [shellSort：希尔排序](/js/sort.js#L72)
 
-#### [quickSort：快速排序](/js/sort.js#L101)
+- [quickSort：快速排序](/js/sort.js#L101)
 
-#### [inPlaceQuickSort：原地快速排序](/js/sort.js#L127)
+- [inPlaceQuickSort：原地快速排序](/js/sort.js#L127)
 
-#### [mergeSort：归并排序](/js/sort.js#L159)
+- [mergeSort：归并排序](/js/sort.js#L159)
 
-#### [heapSort：堆排序](/js/sort.js#L192)
+- [heapSort：堆排序](/js/sort.js#L192)
+
+### recursive[recursive.js](/js/recursive.js)
+
+- [阶梯问题](/js/recursive.js#L10)
+
+- [链式函数](/js/recursive.js#L36)
+
+- [汉诺塔问题](/js/recursive.js#L47)
+
+### other
+
+- [订阅发布者事件模型](/js/event.js)
+
+- [节流函数](/js/others.js#L7)
+
+- [防抖函数](/js/others.js#L21)
 
 
 
