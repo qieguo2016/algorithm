@@ -301,4 +301,32 @@ function mapConcatTest() {
   var target = [['a', 'b', 'c'], ['a', 'b']];
   console.log('\nmapConcatTest:\n', mapConcat(target));
 }
-mapConcatTest()
+// mapConcatTest();
+
+
+// 求整数数组的最大子串和，如 [-23, 17, -7, 11, -2, 1, -34] 的最大子串和是21，对应子串是 [17, -7, 11]
+function maxSeqSum(arr) {
+    if (!Array.isArray(arr)) {
+        return null;
+    }
+    const len = arr.length;
+    let maxSum = arr[0];
+    let seqSum = arr[0];
+    for (let i = 1; i < len; i++) {
+        if (seqSum <= 0) {
+            seqSum = arr[i];
+        } else {
+            seqSum += arr[i];
+        }
+        if (seqSum > maxSum) {
+            maxSum = seqSum;
+        }
+    }
+    return maxSum;
+}
+function maxSeqSumTest() {
+    console.log(maxSeqSum([-23, 17, -7, 11, -2, 1, -34]));
+    console.log(maxSeqSum([1, -2, 3, 10, -4, 7, 2, -5]));
+    console.log(maxSeqSum([-1]));
+}
+// maxSeqSumTest();
