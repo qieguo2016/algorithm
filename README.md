@@ -1,4 +1,4 @@
-# 算法与数据结构（for js）
+# 算法与数据结构
 
 ## 数据结构部分
 
@@ -29,6 +29,8 @@ js中可以通过对象的哈希结构来实现树结构，两种数据结构结
 - [递归相关](#recursive)
 
 - [其他](#other)
+
+- [leetcode (golang)] (#leetcode)
 
 ### Array [array.js](/js/array.js)
 
@@ -78,8 +80,9 @@ js中可以通过对象的哈希结构来实现树结构，两种数据结构结
 
 - [防抖函数](/js/others.js#L21)
 
+### leetcode
 
-
+LeetCode的golang解题
 
 
 
