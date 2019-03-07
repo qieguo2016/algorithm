@@ -93,6 +93,83 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 	return float64(findKth(nums1, nums2, left)+findKth(nums1, nums2, right)) / 2.0
 }
 
+func findPalindrome(s string, left int, right int) string {
+	j := left
+	k := right
+	l := len(s)
+	ret := s[j : k+1]
+	for {
+		j--
+		k++
+		if j < 0 || k > l-1 {
+			break
+		}
+		if s[j] != s[k] {
+			break
+		}
+		ret = s[j : k+1]
+	}
+	return string(ret)
+}
+
+func longestPalindrome(s string) string {
+	l := len(s)
+	if l < 2 {
+		return s
+	}
+	target := s[:1]
+	for i := 0; i < l-1; i++ {
+		if s[i] == s[i+1] {
+			p := findPalindrome(s, i, i+1)
+			if len(target) < len(p) {
+				target = p
+			}
+		} else if i-1 >= 0 && i+1 < l && s[i-1] == s[i+1] {
+			p := findPalindrome(s, i-1, i+1)
+			if len(target) < len(p) {
+				target = p
+			}
+		}
+	}
+	return target
+}
+
+func swap(arr []int, i int, j int) {
+	tmp := arr[i]
+	arr[i] = arr[j]
+	arr[j] = tmp
+}
+
+func BubbleSort(arr []int) []int {
+	if len(arr) == 0 {
+		return arr
+	}
+	for j := len(arr); j > 0; j-- {
+		for i := 0; i < j-1; i++ {
+			if arr[i] > arr[i+1] {
+				swap(arr, i, i+1)
+			}
+		}
+	}
+	return arr
+}
+
+func SelectSort(arr []int) []int {
+	if len(arr) == 0 {
+		return arr
+	}
+	for j := len(arr); j > 0; j-- {
+		maxIndex := 0
+		for i := 1; i < j; i++ {
+			if arr[i] > arr[maxIndex] {
+				maxIndex = i
+			}
+		}
+		swap(arr, maxIndex, j-1)
+	}
+	return arr
+}
+
 func main() {
 	fmt.Println("===== start =====")
 	a := []int{1, 5, 7}
@@ -102,4 +179,10 @@ func main() {
 	fmt.Println(findNth(a, b, 1))
 	fmt.Println(findNth(a, b, 3))
 	fmt.Println(findMedianSortedArrays(a, b))
+	s := "abaab"
+	fmt.Println(s[1:5])
+	fmt.Println(s[1])
+	fmt.Println(longestPalindrome(s))
+	fmt.Println(BubbleSort([]int{1, 9, 4, 3, 8}))
+	fmt.Println(SelectSort([]int{1, 9, 4, 3, 8}))
 }
