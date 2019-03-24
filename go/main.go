@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	// "math"
 )
 
 func min(a int, b int) int {
@@ -170,19 +169,162 @@ func SelectSort(arr []int) []int {
 	return arr
 }
 
+type LRUChainNode struct {
+	pre  *LRUChainNode
+	next *LRUChainNode
+	key  int
+	ts   int32
+}
+
+type CacheObject struct {
+	value int
+	node  *LRUChainNode
+}
+
+type LRUCache struct {
+	cap   int
+	num   int
+	store map[int]*CacheObject
+	head  *LRUChainNode
+	tail  *LRUChainNode
+}
+
+func Constructor(capacity int) LRUCache {
+	return LRUCache{
+		cap:   capacity,
+		num:   0,
+		store: map[int]*CacheObject{},
+	}
+}
+
+func (this *LRUCache) updateLRUChain(node *LRUChainNode, isPut bool) {
+	// 从原位置删掉
+	if node.pre != nil {
+		node.pre.next = node.next
+	}
+	if node.next != nil {
+		node.next.pre = node.pre
+	}
+	// 处理队尾
+	if this.tail == node && node.pre != nil {
+		this.tail = node.pre
+	}
+	// 插入到head
+	node.pre = nil
+	node.next = this.head
+	if this.head != nil {
+		this.head.pre = node
+	}
+	this.head = node
+	if !isPut {
+		return
+	}
+	if this.tail == nil {
+		this.tail = node
+		this.num++
+		return
+	}
+	if this.num+1 > this.cap {
+		delete(this.store, this.tail.key)
+		this.tail = this.tail.pre
+		return
+	}
+	this.num++
+}
+
+func (this *LRUCache) Get(key int) int {
+	obj, exist := this.store[key]
+	if !exist {
+		return -1
+	}
+	this.updateLRUChain(obj.node, false)
+	return obj.value
+}
+
+func (this *LRUCache) Put(key int, value int) {
+	obj, exist := this.store[key]
+	if exist {
+		obj.value = value
+		this.updateLRUChain(obj.node, false)
+		return
+	}
+	obj = &CacheObject{value: value}
+	obj.node = &LRUChainNode{key: key}
+	this.store[key] = obj
+	this.updateLRUChain(obj.node, true)
+}
+
+func GetMaxSum(arr []int) int {
+	tmp := 0
+	maxSum := 0
+	for i := 0; i < len(arr); i++ {
+	 tmp += arr[i]
+	 if tmp < 0 {
+		tmp = 0
+	 } else if tmp > maxSum {
+		maxSum = tmp
+	 }
+	}
+	return maxSum
+ }
+ 
+ func BuildDictTree(arr []string) map[string]interface{} {
+	tree := map[string]interface{}{}
+	for _, chars := range arr {
+	 curr := tree
+	 for _, c := range chars {
+		cs := string(c)
+		if v, exist := curr[cs]; exist {
+		 curr = v.(map[string]interface{})
+		} else {
+		 curr[cs] = map[string]interface{}{}
+		 curr = curr[cs].(map[string]interface{})
+		}
+	 }
+	 curr["value"] = 1
+	}
+	return tree
+ }
+ 
+ /**
+ 3道算法题：动态规划、字典树、拆分，只用其中两道即可
+ 算法题先说明思路，然后是实现，可以先在草稿上画一下
+ 算法延伸：
+ 1. 动态规划状态转移方程、最优子结构；
+ 2. 树形结构构建、前中后序遍历；
+ 3.
+ 
+ 网络相关：
+ http持久连接如何实现，同一tcp连接上的不同http请求如何区分，静态动态内容长度传输、分块传输，部分请求
+ 
+ 系统设计：
+ 1. 计数器
+ 2. 限流器
+ 
+ */
+
 func main() {
 	fmt.Println("===== start =====")
-	a := []int{1, 5, 7}
-	b := []int{2, 4, 6}
-	// fmt.Println(a[:1])
-	// fmt.Println(b[1:])
-	fmt.Println(findNth(a, b, 1))
-	fmt.Println(findNth(a, b, 3))
-	fmt.Println(findMedianSortedArrays(a, b))
-	s := "abaab"
-	fmt.Println(s[1:5])
-	fmt.Println(s[1])
-	fmt.Println(longestPalindrome(s))
-	fmt.Println(BubbleSort([]int{1, 9, 4, 3, 8}))
-	fmt.Println(SelectSort([]int{1, 9, 4, 3, 8}))
+	// a := []int{1, 5, 7}
+	// b := []int{2, 4, 6}
+	// // fmt.Println(a[:1])
+	// // fmt.Println(b[1:])
+	// fmt.Println(findNth(a, b, 1))
+	// fmt.Println(findNth(a, b, 3))
+	// fmt.Println(findMedianSortedArrays(a, b))
+	// s := "abaab"
+	// fmt.Println(s[1:5])
+	// fmt.Println(s[1])
+	// fmt.Println(longestPalindrome(s))
+	// fmt.Println(BubbleSort([]int{1, 9, 4, 3, 8}))
+	// fmt.Println(SelectSort([]int{1, 9, 4, 3, 8}))
+	obj := Constructor(1)
+	obj.Put(2, 22)
+	fmt.Println(obj.Get(2)) // 返回  1
+	obj.Put(3, 33)          // 该操作会使得密钥 2 作废
+	fmt.Println(obj.Get(2)) // 返回 -1 (未找到)
+	fmt.Println(obj.Get(3)) // 返回 -1 (未找到)
+
+	// [1],[2,1],[2],[3,2],[2],[3]]
+	fmt.Println("===== end =====")
 }
