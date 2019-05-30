@@ -39,88 +39,85 @@
  */
 
 type LRUChainNode struct {
-	pre  *LRUChainNode
-	next *LRUChainNode
-	key  int
-	ts   int32
-}
-
-type CacheObject struct {
+	pre   *LRUChainNode
+	next  *LRUChainNode
+	key   int
 	value int
-	node  *LRUChainNode
+	ts    int32
 }
 
 type LRUCache struct {
-	cap   int
-	num   int
-	store map[int]*CacheObject
-	head  *LRUChainNode
-	tail  *LRUChainNode
+	capacity int
+	length   int
+	store    map[int]*LRUChainNode
+	head     *LRUChainNode
+	tail     *LRUChainNode
 }
 
 func Constructor(capacity int) LRUCache {
 	return LRUCache{
-		cap:   capacity,
-		num:   0,
-		store: map[int]*CacheObject{},
+		capacity: capacity,
+		length:   0,
+		store:    map[int]*LRUChainNode{},
 	}
 }
 
-func (this *LRUCache) updateLRUChain(node *LRUChainNode, isPut bool) {
-	// 从原位置删掉
-	if node.pre != nil {
+func (this *LRUCache) Delete(key int) {
+	node, exist := this.store[key]
+	if !exist {
+		return
+	}
+	delete(this.store, key)
+	if this.length == 1 {
+		this.head = nil
+		this.tail = nil
+		this.length--
+		return
+	}
+	if node.pre == nil {
+		this.head = this.head.next
+		this.head.pre = nil
+	} else {
 		node.pre.next = node.next
 	}
-	if node.next != nil {
+	if node.next == nil {
+		this.tail = this.tail.pre
+		this.tail.next = nil
+	} else {
 		node.next.pre = node.pre
 	}
-	// 处理队尾
-	if this.tail == node && node.pre != nil {
-		this.tail = node.pre
-	}
-	// 插入到head
-	node.pre = nil
-	node.next = this.head
-	if this.head != nil {
-		this.head.pre = node
-	}
-	this.head = node
-	if !isPut {
-		return
-	}
-	if this.tail == nil {
-		this.tail = node
-		this.num++
-		return
-	}
-	if this.num+1 > this.cap {
-		delete(this.store, this.tail.key)
-		this.tail = this.tail.pre
-		return
-	}
-	this.num++
+	this.length--
 }
 
 func (this *LRUCache) Get(key int) int {
-	obj, exist := this.store[key]
+	node, exist := this.store[key]
 	if !exist {
 		return -1
 	}
-	this.updateLRUChain(obj.node, false)
-	return obj.value
+	this.Delete(key)
+	this.Put(node.key, node.value)
+	return node.value
 }
 
 func (this *LRUCache) Put(key int, value int) {
-	obj, exist := this.store[key]
-	if exist {
-		obj.value = value
-		this.updateLRUChain(obj.node, false)
+	this.Delete(key)
+	if this.length+1 > this.capacity {
+		this.Delete(this.tail.key)
+	}
+	node := LRUChainNode{key: key, value: value}
+	if this.length == 0 {
+		this.head = &node
+		this.tail = &node
+		this.store[key] = &node
+		this.length++
 		return
 	}
-	obj = &CacheObject{value: value}
-	obj.node = &LRUChainNode{key: key}
-	this.store[key] = obj
-	this.updateLRUChain(obj.node, true)
+	// 头部处理
+	this.head.pre = &node
+	node.next = this.head
+	this.head = &node
+	this.store[key] = &node
+	this.length++
 }
 
 /**
