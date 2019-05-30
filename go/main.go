@@ -170,138 +170,86 @@ func SelectSort(arr []int) []int {
 }
 
 type LRUChainNode struct {
-	pre  *LRUChainNode
-	next *LRUChainNode
-	key  int
-	ts   int32
-}
-
-type CacheObject struct {
+	pre   *LRUChainNode
+	next  *LRUChainNode
+	key   int
 	value int
-	node  *LRUChainNode
+	ts    int32
 }
 
 type LRUCache struct {
-	cap   int
-	num   int
-	store map[int]*CacheObject
-	head  *LRUChainNode
-	tail  *LRUChainNode
+	capacity int
+	length   int
+	store    map[int]*LRUChainNode
+	head     *LRUChainNode
+	tail     *LRUChainNode
 }
 
 func Constructor(capacity int) LRUCache {
 	return LRUCache{
-		cap:   capacity,
-		num:   0,
-		store: map[int]*CacheObject{},
+		capacity: capacity,
+		length:   0,
+		store:    map[int]*LRUChainNode{},
 	}
 }
 
-func (this *LRUCache) updateLRUChain(node *LRUChainNode, isPut bool) {
-	// 从原位置删掉
-	if node.pre != nil {
+func (this *LRUCache) Delete(key int) {
+	node, exist := this.store[key]
+	if !exist {
+		return
+	}
+	delete(this.store, key)
+	if this.length == 1 {
+		this.head = nil
+		this.tail = nil
+		this.length--
+		return
+	}
+	if node.pre == nil {
+		this.head = this.head.next
+		this.head.pre = nil
+	} else {
 		node.pre.next = node.next
 	}
-	if node.next != nil {
+	if node.next == nil {
+		this.tail = this.tail.pre
+		this.tail.next = nil
+	} else {
 		node.next.pre = node.pre
 	}
-	// 处理队尾
-	if this.tail == node && node.pre != nil {
-		this.tail = node.pre
-	}
-	// 插入到head
-	node.pre = nil
-	node.next = this.head
-	if this.head != nil {
-		this.head.pre = node
-	}
-	this.head = node
-	if !isPut {
-		return
-	}
-	if this.tail == nil {
-		this.tail = node
-		this.num++
-		return
-	}
-	if this.num+1 > this.cap {
-		delete(this.store, this.tail.key)
-		this.tail = this.tail.pre
-		return
-	}
-	this.num++
+	this.length--
 }
 
 func (this *LRUCache) Get(key int) int {
-	obj, exist := this.store[key]
+	node, exist := this.store[key]
 	if !exist {
 		return -1
 	}
-	this.updateLRUChain(obj.node, false)
-	return obj.value
+	this.Delete(key)
+	this.Put(node.key, node.value)
+	return node.value
 }
 
 func (this *LRUCache) Put(key int, value int) {
-	obj, exist := this.store[key]
-	if exist {
-		obj.value = value
-		this.updateLRUChain(obj.node, false)
+	this.Delete(key)
+	if this.length+1 > this.capacity {
+		this.Delete(this.tail.key)
+	}
+	node := LRUChainNode{key: key, value: value}
+	if this.length == 0 {
+		this.head = &node
+		this.tail = &node
+		this.store[key] = &node
+		this.length++
 		return
 	}
-	obj = &CacheObject{value: value}
-	obj.node = &LRUChainNode{key: key}
-	this.store[key] = obj
-	this.updateLRUChain(obj.node, true)
+	// 头部处理
+	this.head.pre = &node
+	node.next = this.head
+	this.head = &node
+	this.store[key] = &node
+	this.length++
 }
-
-func GetMaxSum(arr []int) int {
-	tmp := 0
-	maxSum := 0
-	for i := 0; i < len(arr); i++ {
-	 tmp += arr[i]
-	 if tmp < 0 {
-		tmp = 0
-	 } else if tmp > maxSum {
-		maxSum = tmp
-	 }
-	}
-	return maxSum
- }
- 
- func BuildDictTree(arr []string) map[string]interface{} {
-	tree := map[string]interface{}{}
-	for _, chars := range arr {
-	 curr := tree
-	 for _, c := range chars {
-		cs := string(c)
-		if v, exist := curr[cs]; exist {
-		 curr = v.(map[string]interface{})
-		} else {
-		 curr[cs] = map[string]interface{}{}
-		 curr = curr[cs].(map[string]interface{})
-		}
-	 }
-	 curr["value"] = 1
-	}
-	return tree
- }
- 
- /**
- 3道算法题：动态规划、字典树、拆分，只用其中两道即可
- 算法题先说明思路，然后是实现，可以先在草稿上画一下
- 算法延伸：
- 1. 动态规划状态转移方程、最优子结构；
- 2. 树形结构构建、前中后序遍历；
- 3.
- 
- 网络相关：
- http持久连接如何实现，同一tcp连接上的不同http请求如何区分，静态动态内容长度传输、分块传输，部分请求
- 
- 系统设计：
- 1. 计数器
- 2. 限流器
- 
- */
 
 func main() {
 	fmt.Println("===== start =====")
@@ -318,13 +266,13 @@ func main() {
 	// fmt.Println(longestPalindrome(s))
 	// fmt.Println(BubbleSort([]int{1, 9, 4, 3, 8}))
 	// fmt.Println(SelectSort([]int{1, 9, 4, 3, 8}))
+	
 	obj := Constructor(1)
 	obj.Put(2, 22)
-	fmt.Println(obj.Get(2)) // 返回  1
+	fmt.Println(obj.Get(2)) // 返回  22
 	obj.Put(3, 33)          // 该操作会使得密钥 2 作废
 	fmt.Println(obj.Get(2)) // 返回 -1 (未找到)
-	fmt.Println(obj.Get(3)) // 返回 -1 (未找到)
+	fmt.Println(obj.Get(3)) // 返回 33
 
-	// [1],[2,1],[2],[3,2],[2],[3]]
 	fmt.Println("===== end =====")
 }

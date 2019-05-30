@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
+            "type": "go",
             "request": "launch",
             "name": "启动程序",
-            "program": "${workspaceRoot}/js/temp.js",
+            "program": "${workspaceRoot}/go/main.go",
             "cwd": "${workspaceRoot}"
         }
     ]
