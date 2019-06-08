@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	// "math"
+	// "sort"
 )
 
 func min(a int, b int) int {
@@ -266,7 +268,7 @@ func main() {
 	// fmt.Println(longestPalindrome(s))
 	// fmt.Println(BubbleSort([]int{1, 9, 4, 3, 8}))
 	// fmt.Println(SelectSort([]int{1, 9, 4, 3, 8}))
-	
+
 	obj := Constructor(1)
 	obj.Put(2, 22)
 	fmt.Println(obj.Get(2)) // 返回  22
