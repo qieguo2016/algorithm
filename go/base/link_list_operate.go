@@ -5,6 +5,28 @@ import (
 	"errors"
 )
 
+// 链表操作类：1.调整链表顺序, 2.两个链表相互作用，3）判断链表性质
+// 常见问题：
+// a)单向链表操作基础是前一个指针，所以一般从head开始循环cur.Next，记得判断cur.Next!=nil
+// b)操作数从1开始，都是左闭右开，注意终止时不要多跑了
+// d)常用双指针来做，每个循环都要检查两个指针是否需要变化
+// d)注意其中一条循环完毕之后后一条的剩余节点要循环完
+
+// 链表节点连接调整基本套路：
+// ReverseBetween 范围反转
+
+
+// 原地反转(from, to)之间的链表，不包含from/to
+func reverseRange(from *ListNode, to *ListNode) {
+	cur := from.Next
+	for cur != nil && cur.Next != to {
+		next := cur.Next  // 2
+		cur.Next = cur.Next.Next  // 13
+		next.Next = from.Next  // 213
+		from.Next = next  // h213
+	}
+}
+
 // ReverseLinkList 原地反转链表
 // 新建一个返回链表，next指向原链表头
 // 每次循环：原链头所指向的元素移动到返回链头，并指向上次循环的返回链头
