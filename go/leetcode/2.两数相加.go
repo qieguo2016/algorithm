@@ -33,13 +33,10 @@
  * }
  */
 func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
-	l := &ListNode{}
-	c := l
-	n := 0
-	for {
-		if l1 == nil && l2 == nil {
-			break
-		}
+	dummy := &ListNode{}
+	c := dummy
+	n := 0  // 进位数
+	for l1 != nil || l2 != nil {
 		s := n
 		if l1 != nil {
 			s += l1.Val
@@ -56,6 +53,6 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 	if n != 0 {
 		c.Next = &ListNode{Val: n}
 	}
-	return l.Next
+	return dummy.Next
 }
 
