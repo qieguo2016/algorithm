@@ -15,15 +15,20 @@ import (
 // 链表节点连接调整基本套路：
 // ReverseBetween 范围反转
 
+// ListNode 单链表
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
 
-// 原地反转(from, to)之间的链表，不包含from/to
-func reverseRange(from *ListNode, to *ListNode) {
+// ReverseRange 原地反转(from, to)之间的链表，不包含from/to
+func ReverseRange(from *ListNode, to *ListNode) {
 	cur := from.Next
 	for cur != nil && cur.Next != to {
-		next := cur.Next  // 2
-		cur.Next = cur.Next.Next  // 13
-		next.Next = from.Next  // 213
-		from.Next = next  // h213
+		next := cur.Next         // 2
+		cur.Next = cur.Next.Next // 13
+		next.Next = from.Next    // 213
+		from.Next = next         // h213
 	}
 }
 
@@ -40,6 +45,53 @@ func ReverseLinkList(head *LinkListNode) *LinkListNode {
 		dummy.next = n
 	}
 	return dummy.next
+}
+
+// SortList 链表排序，采用非原地快排，注意点：
+// 1.基准选择头部节点，且要单独出来
+// 2.新分组要切换队尾与原链表的关联
+// 3.合并的时候要记得切断基准节点与原链表的关联
+func SortList(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	sl := &ListNode{}
+	ll := &ListNode{}
+	sn := sl // 小端当前节点
+	ln := ll // 大端当前节点
+	// 单次比较，比较基准取头节点
+	cur := head.Next // 注意基准要单独出来，否则不能满足一个元素的退出条件
+	for cur != nil {
+		if cur.Val < head.Val {
+			sn.Next = cur
+			sn = cur
+		} else {
+			ln.Next = cur
+			ln = cur
+		}
+		cur = cur.Next
+	}
+	// 切断原链表
+	sn.Next = nil
+	ln.Next = nil
+	// 递归快排
+	sl = SortList(sl.Next)
+	ll = SortList(ll.Next)
+	// 合并返回新队列
+	cur = sl
+	if cur != nil {
+		for cur.Next != nil {
+			cur = cur.Next
+		}
+		cur.Next = head
+		head.Next = nil // 注意要切断原head
+		if ll != nil {
+			head.Next = ll
+		}
+		return sl
+	}
+	head.Next = ll
+	return head
 }
 
 // IsLinkListLoop 是否存在闭环，两种实现
@@ -148,11 +200,6 @@ func GetRevKthFromLinkList(head *LinkListNode, k int) (int, error) {
 		return ret, nil
 	}
 	return 0, errors.New("not_found")
-}
-
-type ListNode struct {
-	Val  int
-	Next *ListNode
 }
 
 type srHeap []*ListNode
