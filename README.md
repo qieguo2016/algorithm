@@ -30,11 +30,14 @@ golang实现的单链表和双链表结构
 
 #### [树 (golang)](/go/base/tree.go)
 
-golang实现字典树
+常用树型结构的golang实现
+- 字典树
+- 搜索二叉树
 
-#### [LRU cache(golang)](/go/base/lru.go)
+#### [cache(golang)](/go/base/lru.go)
 
-golang实现LRUcache
+- golang实现LRUcache [LRU cache(golang)](/go/base/lru.go)
+- golang实现LFUcache [LFU cache(golang)](/go/base/lfu.go)
 
 ## 算法部分
 
