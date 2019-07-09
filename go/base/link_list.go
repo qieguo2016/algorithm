@@ -210,3 +210,112 @@ func (dll *DualLinkList) Visit(fn func(node *DualLinkListNode)) {
 		fn(cur)
 	}
 }
+
+/****** go源码的双链表实现 ******/
+
+// ListElement 链表节点，list指向链表
+type ListElement struct {
+	prev, next *ListElement
+	list       *List
+	Value      interface{}
+}
+
+// List 链表结构，首尾相连
+type List struct {
+	root ListElement
+	len  int
+}
+
+// New 新建双链表
+func New() *List {
+	l := &List{
+		root: ListElement{},
+		len:  0,
+	}
+	l.root.prev = &l.root
+	l.root.next = &l.root
+	return l
+}
+
+// insert 将el插入到pos之后
+func (l *List) insert(el, pos *ListElement) *ListElement {
+	n := pos.next
+	el.next = n
+	n.prev = el
+	pos.next = el
+	el.prev = pos
+	el.list = l
+	l.len++
+	return el
+}
+
+func (l *List) remove(el *ListElement) *ListElement {
+	el.prev.next = el.next
+	el.next.prev = el.prev
+	el.prev = nil
+	el.next = nil
+	el.list = nil
+	l.len--
+	return el
+}
+
+// InsertBefore 插入到指定位置之前
+func (l *List) InsertBefore(v interface{}, pos *ListElement) *ListElement {
+	if pos.list != l {
+		return nil
+	}
+	return l.insert(&ListElement{Value: v}, pos.prev)
+}
+
+// InsertAfter 插入到指定位置之前
+func (l *List) InsertAfter(v interface{}, pos *ListElement) *ListElement {
+	if pos.list != l {
+		return nil
+	}
+	return l.insert(&ListElement{Value: v}, pos)
+}
+
+// Remove 删除节点
+func (l *List) Remove(el *ListElement) interface{} {
+	if el.list == l {
+		l.remove(el)
+	}
+	return el.Value
+}
+
+// MoveBefore 移动节点到指定位置之前
+func (l *List) MoveBefore(el, pos *ListElement) {
+	if el.list != l || el == pos || pos.list != l {
+		return
+	}
+	l.InsertBefore(l.Remove(el), pos)
+}
+
+// MoveAfter 移动节点到指定位置之后
+func (l *List) MoveAfter(el, pos *ListElement) {
+	if el.list != l || el == pos || pos.list != l {
+		return
+	}
+	l.InsertAfter(l.Remove(el), pos)
+}
+
+// Len 长度
+func (l *List) Len() int {
+	return l.len
+}
+
+// Head 链表头节点
+func (l *List) Head() *ListElement {
+	if l.len == 0 {
+		return nil
+	}
+	return l.root.next
+}
+
+// Tail 链表尾节点
+func (l *List) Tail() *ListElement {
+	if l.len == 0 {
+		return nil
+	}
+	return l.root.prev
+}
