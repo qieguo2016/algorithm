@@ -4,6 +4,16 @@
 
 ## 数据结构部分
 
+#### [跳跃表 (golang)](/go/base/skip_list.go)
+增加了向前指针的链表叫作跳表。跳表全称叫做跳跃表，简称跳表。跳表是一个随机化的数据结构，实质就是一种可以进行二分查找的有序链表。跳表在原有的有序链表上面增加了多级索引，通过索引来实现快速查找。跳表不仅能提高搜索性能，同时也可以提高插入和删除操作的性能。
+
+#### [cache (golang)](/go/base/lru.go)
+
+LRU是Least Recently Used的缩写，即最近最少使用，是一种常用的页面置换算法，选择最近最久未使用的页面予以淘汰。该算法赋予每个页面一个访问字段，用来记录一个页面自上次被访问以来所经历的时间 t，当须淘汰一个页面时，选择现有页面中其 t 值最大的，即最近最久未使用的页面予以淘汰。  
+LFU（least frequently used (LFU) page-replacement algorithm）。即最不经常使用页置换算法，要求在页置换时置换引用计数最小的页，因为经常使用的页应该有一个较大的引用次数。但是有些页在开始时使用次数很多，但以后就不再使用，这类页将会长时间留在内存中，因此可以将引用计数寄存器定时右移一位，形成指数衰减的平均使用次数。
+- golang实现LRUcache [LRU cache(golang)](/go/base/lru.go)
+- golang实现LFUcache [LFU cache(golang)](/go/base/lfu.go)
+
 #### [堆 (golang)](/go/base/heap.go)
 
 堆是一种带有顺序结构的完全二叉树，分为大根堆和小根堆，根据完全二叉和父子大小关系，利用数组结构比较容易实现堆结果。另外golang本身的堆实现(container/heap.go)则使用了sort接口，更加灵活。
@@ -17,13 +27,6 @@ golang实现的单链表和双链表结构
 常用树型结构的golang实现
 - 字典树
 - 搜索二叉树
-
-#### [cache(golang)](/go/base/lru.go)
-
-LRU是Least Recently Used的缩写，即最近最少使用，是一种常用的页面置换算法，选择最近最久未使用的页面予以淘汰。该算法赋予每个页面一个访问字段，用来记录一个页面自上次被访问以来所经历的时间 t，当须淘汰一个页面时，选择现有页面中其 t 值最大的，即最近最久未使用的页面予以淘汰。  
-LFU（least frequently used (LFU) page-replacement algorithm）。即最不经常使用页置换算法，要求在页置换时置换引用计数最小的页，因为经常使用的页应该有一个较大的引用次数。但是有些页在开始时使用次数很多，但以后就不再使用，这类页将会长时间留在内存中，因此可以将引用计数寄存器定时右移一位，形成指数衰减的平均使用次数。
-- golang实现LRUcache [LRU cache(golang)](/go/base/lru.go)
-- golang实现LFUcache [LFU cache(golang)](/go/base/lfu.go)
 
 #### [线性表：数组与链表、队列与栈](/md/数组与链表，堆栈与队列.md)
 
