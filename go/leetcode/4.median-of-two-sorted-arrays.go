@@ -109,12 +109,15 @@ func findNth(arr1 []int, arr2 []int, n int) int {
 	}
 	m1 := (n - 1) / 2
 	m2 := (n - 1) / 2
+	// n/2就超过了某一个队列的长度，由于n是合法输入，那也不能在长队列的小端
+	// 反推一下，假如k在长队列的小端，那么也要从短队列中搬运超过n/2的元素过来，但是n/2大于队列长度，不成立
 	if m1 > l1-1 {
 		arr2 = leftSub(arr2, m2+1)
 		n = n - m2 - 1
 	} else if m2 > l2-1 {
 		arr1 = leftSub(arr1, m1+1)
 		n = n - m1 - 1
+	// 下面讨论k/2都在数组中的情况，这时肯定不可能在最小端
 	} else if arr1[m1] < arr2[m2] {
 		arr1 = leftSub(arr1, m1+1)
 		n = n - m1 - 1
