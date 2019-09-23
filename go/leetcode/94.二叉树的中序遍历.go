@@ -38,18 +38,62 @@
  * }
  */
 
-func travel(root *TreeNode, res *[]int) {
-	if root == nil {
-		return
+// // 递归
+// func travel(root *TreeNode, res *[]int) {
+// 	if root == nil {
+// 		return
+// 	}
+// 	travel(root.Left, res)
+// 	*res = append(*res, root.Val)
+// 	travel(root.Right, res)
+// }
+
+// func inorderTraversal(root *TreeNode) []int {
+// 	ret := []int{}
+// 	travel(root, &ret)
+// 	return ret
+// }
+
+// 非递归
+type Stack struct {
+	Value []*TreeNode
+}
+
+func (s *Stack) Push(node *TreeNode) {
+	s.Value = append(s.Value, node)
+}
+
+func (s *Stack) Pop() (*TreeNode, bool) {
+	if len(s.Value) == 0 {
+		return nil, false
 	}
-	travel(root.Left, res)
-	*res = append(*res, root.Val)
-	travel(root.Right, res)
+	ret := s.Value[len(s.Value) - 1]
+	s.Value = s.Value[:len(s.Value) -1]
+	return ret, true
 }
 
-func inorderTraversal(root *TreeNode) []int {
-	ret := []int{}
-	travel(root, &ret)
-	return ret
+func (s *Stack) IsEmpty() bool {
+	return len(s.Value) == 0
 }
 
+func inorderTraversal(root *TreeNode) []int {	
+	res := []int{}
+	if root == nil {
+		return res
+	}
+	s := &Stack{}
+	for !s.IsEmpty() || root != nil {
+		if root != nil {
+			s.Push(root)
+			root = root.Left
+		} else {
+			node, ok := s.Pop()
+			if !ok {
+				continue
+			}
+			res = append(res, node.Val)
+			root = node.Right
+		}
+	}
+	return res
+}
