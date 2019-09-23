@@ -2,6 +2,13 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+	_ "net/http/pprof"
+	"runtime"
+	"time"
+
+	"github.com/qieguo2016/algorithm/go/base"
 	// "math"
 	// "sort"
 )
@@ -269,12 +276,28 @@ func main() {
 	// fmt.Println(BubbleSort([]int{1, 9, 4, 3, 8}))
 	// fmt.Println(SelectSort([]int{1, 9, 4, 3, 8}))
 
-	obj := Constructor(1)
-	obj.Put(2, 22)
-	fmt.Println(obj.Get(2)) // 返回  22
-	obj.Put(3, 33)          // 该操作会使得密钥 2 作废
-	fmt.Println(obj.Get(2)) // 返回 -1 (未找到)
-	fmt.Println(obj.Get(3)) // 返回 33
+	// obj := Constructor(1)
+	// obj.Put(2, 22)
+	// fmt.Println(obj.Get(2)) // 返回  22
+	// obj.Put(3, 33)          // 该操作会使得密钥 2 作废
+	// fmt.Println(obj.Get(2)) // 返回 -1 (未找到)
+	// fmt.Println(obj.Get(3)) // 返回 33
 
-	fmt.Println("===== end =====")
+	n := runtime.NumCPU()
+	fmt.Println("cpu num=", n)
+	runtime.GOMAXPROCS(n)
+
+	go func() {
+		log.Println(http.ListenAndServe("localhost:10000", nil))
+	}()
+
+	fmt.Println("stage 0, go num=", runtime.NumGoroutine()) // 默认两个go
+
+	// AlternateOutputViaChannel()
+	// AlternateOutputViaAtomic()
+	base.AlternateOutputViaCond()
+
+	time.Sleep(100 * time.Second)
+
+	// fmt.Println("===== end =====")
 }
