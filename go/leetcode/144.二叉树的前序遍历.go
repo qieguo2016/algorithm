@@ -39,18 +39,60 @@
  * }
  */
 
-func travel(root *TreeNode, res *[]int) {
-	if root == nil {
-		return
+// 递归
+// func travel(root *TreeNode, res *[]int) {
+// 	if root == nil {
+// 		return
+// 	}
+// 	*res = append(*res, root.Val)
+// 	travel(root.Left, res)
+// 	travel(root.Right, res)
+// }
+
+// func preorderTraversal(root *TreeNode) []int {
+// 	res := []int{}
+// 	travel(root, &res)
+// 	return res
+// }
+
+// 非递归
+type Stack struct {
+	Value []*TreeNode
+}
+
+func (s *Stack) Push(node *TreeNode) {
+	s.Value = append(s.Value, node)
+}
+
+func (s *Stack) Pop() (*TreeNode, bool) {
+	if len(s.Value) == 0 {
+		return nil, false
 	}
-	*res = append(*res, root.Val)
-	travel(root.Left, res)
-	travel(root.Right, res)
+	ret := s.Value[len(s.Value) - 1]
+	s.Value = s.Value[:len(s.Value) -1]
+	return ret, true
 }
 
 func preorderTraversal(root *TreeNode) []int {
 	res := []int{}
-	travel(root, &res)
+	if root == nil {
+		return res
+	}
+	s := &Stack{}
+	s.Push(root)
+	for {
+		node, ok := s.Pop()
+		if !ok {
+			break
+		}
+		res = append(res, node.Val)
+		if node.Right != nil {
+			s.Push(node.Right)
+		}
+		if node.Left != nil {
+			s.Push(node.Left)
+		}
+	}
 	return res
 }
 
