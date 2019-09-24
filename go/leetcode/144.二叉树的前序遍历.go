@@ -73,24 +73,28 @@ func (s *Stack) Pop() (*TreeNode, bool) {
 	return ret, true
 }
 
+func (s *Stack) IsEmpty() bool {
+	return len(s.Value) == 0
+}
+
+// 非递归与层序遍历有点类似，第一次遇到节点就加入结果集，而且是从左到右的顺序
+// 那么在同时拥有左右节点的时候，左节点是可以直接输出的，但是右节点需要存储起来，而且是底层节点先出，也就是后进先出
+// 所以，需要用一个栈来存储右节点
 func preorderTraversal(root *TreeNode) []int {
 	res := []int{}
 	if root == nil {
 		return res
 	}
 	s := &Stack{}
-	s.Push(root)
-	for {
-		node, ok := s.Pop()
-		if !ok {
-			break
-		}
-		res = append(res, node.Val)
-		if node.Right != nil {
-			s.Push(node.Right)
-		}
-		if node.Left != nil {
-			s.Push(node.Left)
+	for !s.IsEmpty() || root != nil {
+		if root != nil {
+			res = append(res, root.Val)
+			if root.Right != nil {
+				s.Push(root.Right)
+			}
+			root = root.Left
+		} else {
+			root, _ = s.Pop()
 		}
 	}
 	return res
