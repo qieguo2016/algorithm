@@ -76,11 +76,11 @@ func (s *Stack) IsEmpty() bool {
 	return len(s.Value) == 0
 }
 
+// 非递归的中序遍历是指在第二次遇到节点时（假设叶子节点带有虚拟子节点）输出节点，节点访问顺序还是根左右的顺序，
+// 那么需要用栈来存根结点，然后继续遍历左节点，当左节点到了尽头之后，算上虚拟子节点左节点就访问2次了可以输出，然后是是右节点。
+// 所以用一个栈来存根结点即可。
 func inorderTraversal(root *TreeNode) []int {	
 	res := []int{}
-	if root == nil {
-		return res
-	}
 	s := &Stack{}
 	for !s.IsEmpty() || root != nil {
 		if root != nil {
