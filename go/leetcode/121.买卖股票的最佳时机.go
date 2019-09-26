@@ -40,7 +40,7 @@
 // 在发现更低买点的时候，是不可能在这个时候卖出的，所以最大利润是昨天的利润
 // 遍历下来，不断更新买点和比较最大利润，就可以得到结果
 func maxProfit(prices []int) int {
-	if len(prices) <= 0 {
+	if len(prices) <= 1 {
 		return 0
 	}
 	buy := prices[0]
