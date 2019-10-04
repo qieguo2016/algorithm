@@ -32,11 +32,12 @@
 
 
 func permute(nums []int) [][]int {
-	visited := make([]bool, len(nums))
-	out := []int{}
-	res := [][]int{}
-	permuteDFS(&nums, 0, &visited, &out, &res)
-	return res
+	// visited := make([]bool, len(nums))
+	// out := []int{}
+	// res := [][]int{}
+	// permuteDFS(&nums, 0, &visited, &out, &res)
+	// return res
+	return helper(nums)
 }
 
 // 深度优先递归，通过访问标记数组去重
@@ -56,4 +57,32 @@ func permuteDFS(nums *[]int, level int, visited *[]bool, out *[]int, res *[][]in
 		(*visited)[i] = false
 	}
 }
+
+func add(arr []int, num int) [][]int {
+	ret := [][]int{}
+	for i := 0; i <= len(arr); i++ {
+		tmp := append([]int{}, arr[:i]...)
+		tmp = append(tmp, num)
+		tmp = append(tmp, arr[i:]...)
+		ret = append(ret, tmp)
+	}
+	return ret
+}
+
+func helper(nums []int) [][]int {
+	if len(nums) <= 1 {
+		return [][]int{nums}
+	}
+	ret := add([]int{}, nums[0])
+	for i := 1; i < len(nums); i++ {
+		arr := [][]int{}
+		for j := 0; j < len(ret); j++ {
+			tmp := add(ret[j], nums[i])
+			arr = append(arr, tmp...)
+		}
+		ret = append([][]int{}, arr...)
+	}
+	return ret
+}
+
 
