@@ -68,7 +68,9 @@
  * 
  * 
  */
- func myAtoi(str string) int {
+
+// @lc code=start
+func myAtoi(str string) int {
 	INT_MAX := 1<<31 - 1 // 2147483647
 	INT_MIN := ^INT_MAX  // -2147483648
 	n := len(str)
@@ -101,4 +103,6 @@
 	}
 	return base * flag
 }
+
+// @lc code=end
 
