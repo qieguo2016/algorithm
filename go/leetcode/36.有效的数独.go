@@ -74,50 +74,28 @@
  */
 
 // @lc code=start
-const empty byte = '.'
-func isConflict(digits []byte) bool {
-	m := map[byte]bool{}
-	for _, el := range digits {
-		if el == empty {
-			continue
-		}
-		if _, ok := m[el]; ok {
-			return true
-		}
-		m[el] = true
-	}
-	return false
-}
-
 const SIZE = 9
+const empty byte = '.'
+const one byte = '1'
 func isValidSudoku(board [][]byte) bool {
-  for _, row := range board {
-		if isConflict(row) {
-			return false
-		}
-	}
+	// 每行每列每个小方块内的1-9数字的出现情况（字符转数字变为0-8）
+	rowFlag := [9][9]bool{}
+	colFlag := [9][9]bool{}
+	cellFlag := [9][9]bool{}  // 从上到下，从左到右1-9排列
+
 	for i := 0; i < SIZE; i++ {
-		column := make([]byte, 9)
 		for j := 0; j < SIZE; j++ {
-			column[j] = board[j][i]
-		}
-		if isConflict(column) {
-			return false
-		}
-	}
-	for i := 0; i < SIZE; i+=3 {
-		for j := 0; j < SIZE; j+=3 {
-			table := make([]byte, 9)
-			k := 0
-			for m := 0; m < 3; m++ {
-				for n := 0; n < 3; n++ {
-					table[k] = board[i+m][j+n]
-					k++
-				}
+			cur := board[i][j]
+			if cur == empty {
+				continue
 			}
-			if isConflict(table) {
+			num := int(cur-one)
+			if (rowFlag[i][num] || colFlag[j][num] || cellFlag[i/3 + 3*(j/3)][num]) {
 				return false
 			}
+			rowFlag[i][num] = true;
+			colFlag[j][num] = true;
+			cellFlag[i/3 + 3*(j/3)][num] = true;
 		}
 	}
 	return true
