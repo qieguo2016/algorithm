@@ -71,19 +71,7 @@ function arrayFilterTest() {
  * @param       : <Array> target 要去重的数组
  * @description : 数组去重；可用es6 set、正则、sort等实现
  */
-function arrayUnique(target) {
-  // 纯数组硬比较方式，这里要注意是否需要空对象{}的去重，暂不处理
-  // var result = [target[0]];
-  // for (var i = 1, targetLen = target.length; i < targetLen; i++) {
-  //   for (var j = 0, resultLen = result.length; j < resultLen; j++) {
-  //     if (result[j] === target[i]) {
-  //       break;    // j++是在循环体结束后自增，使用break则在自增前就跳出循环了
-  //     }
-  //   }
-  //   if (j === resultLen) {
-  //     result.push(target[i]);
-  //   }
-  // }
+/*function arrayUnique(target) {
 
   // 对于去重这种无序的集合，可使用js对象的哈希特性来提高效率，但无法直接区分数字、字符，统一转为字符了
   // Note: 数据量少的情况下，哈希算法本身的复杂度就超过了循环对比，所以性能上反而更差
@@ -100,11 +88,29 @@ function arrayUnique(target) {
     }
   }
   return result;
+ }
+*/
+function arrayUnique(target) {
+  var result = [target[0]];
+  var temp = Object.create(null);
+  temp[target[0]] = {};
+  temp[target[0]][(typeof target[0])] = true
+  for (var i = 1, targetLen = target.length; i < targetLen; i++) {
+    if(typeof temp[target[i]] === 'undefined'){
+      result.push(target[i]);
+      temp[target[i]] = {};
+      temp[target[i]][(typeof target[i])] = true
+    } else if (!(typeof target[i] in temp[target[i]])) {
+      result.push(target[i]);
+      temp[target[i]][(typeof target[i])] = true
+    }
+  }
+  return result;
 }
 function arrayUniqueTest() {
   // var target = [1, 2, 3, 3, '3', '3', 'length', '__proto__', 'prototype', true, false, true, {}, {}, null, null];
-  var target = [1, 2, 3, 3, '3', '3', '__proto__', '__proto__', '__proto__', 'prototype', 'prototype', true, false, true, {}, {}, null, null];
-  // var target = [1, '1', true, 'true'];
+  // var target = [1, 2, 3, 3, '3', '3', '__proto__', '__proto__', '__proto__', 'prototype', 'prototype', true, false, true, {}, {}, null, null];
+  var target = ['1',1,'1',1]   //原作者的去重函数在这种情况下无法去重
   console.log('\narrayUnique test:\n', arrayUnique(target));
 }
 
