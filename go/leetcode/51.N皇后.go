@@ -82,16 +82,21 @@ func dfs(rect *[][]string, row int, res *[][]string) {
 }
 
 func isValid(rect *[][]string, row int, col int) bool {
+	// 因为每次都是递增row和col，所以之后的row和col不需要检查
+	// 不需要检查行，以为每行只有一次放的机会
+	// 检测列
 	for i := 0; i < row; i++ {
 		if (*rect)[i][col] == "Q" {
 			return false
 		}
 	}
+	// 左上对角线检查
 	for i, j := row - 1, col - 1; i >= 0 && j >= 0; i, j = i-1, j-1 {
 		if (*rect)[i][j] == "Q" {
 			return false
 		}
 	}
+	// 右上对角线检查
 	for i, j := row - 1, col + 1; i >= 0 && j < len(*rect); i, j = i-1, j+1 {
 		if (*rect)[i][j] == "Q" {
 			return false
