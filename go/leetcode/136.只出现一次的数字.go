@@ -33,6 +33,8 @@
  */
 
 // @lc code=start
+// 异或：相同的位置置0，不同的位置1
+// 因此，对数组所有元素进行异或，出现2次的数字的所有位被抵消了，只剩出现1次的数字
 func singleNumber(nums []int) int {
 	ret := nums[0]
 	for i := 1; i < len(nums); i++ {
