@@ -117,7 +117,7 @@ func findNth(arr1 []int, arr2 []int, n int) int {
 	} else if m2 > l2-1 {
 		arr1 = leftSub(arr1, m1+1)
 		n = n - m1 - 1
-	// 下面讨论k/2都在数组中的情况，这时肯定不可能在最小端
+		// 下面讨论k/2都在数组中的情况，这时肯定不可能在最小端
 	} else if arr1[m1] < arr2[m2] {
 		arr1 = leftSub(arr1, m1+1)
 		n = n - m1 - 1

@@ -2,7 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"math/rand"
+	"net/http"
 	_ "net/http/pprof"
+	"runtime"
+	"time"
 	// "math"
 	// "strconv"
 	// "strings"
@@ -32,36 +37,29 @@ func main() {
 	// fmt.Println(obj.Get(2)) // 返回 -1 (未找到)
 	// fmt.Println(obj.Get(3)) // 返回 33
 
-	// n := runtime.NumCPU()
-	// fmt.Println("cpu num=", n)
-	// runtime.GOMAXPROCS(n)
+	n := runtime.NumCPU()
+	fmt.Println("cpu num=", n)
+	runtime.GOMAXPROCS(n)
 
-	// go func() {
-	// 	log.Println(http.ListenAndServe("localhost:10000", nil))
-	// }()
+	go func() {
+		log.Println(http.ListenAndServe("localhost:10000", nil))
+	}()
 
-	// fmt.Println("stage 0, go num=", runtime.NumGoroutine()) // 默认两个go
-
-	// // AlternateOutputViaChannel()
-	// // AlternateOutputViaAtomic()
+	// AlternateOutputViaChannel()
+	// AlternateOutputViaAtomic()
 	// base.AlternateOutputViaCond()
-
-	// time.Sleep(100 * time.Second)
-
-	// fmt.Println(helper([]int{1, 2, 3}))
-	// fmt.Println(myAtoi("42"))
-	// fmt.Println(multiply("456", "123"))
-	// strings.IndexOf()
-	a := [][]int{
-		[]int{5, 1, 9,11},
-		[]int{2, 4, 8,10},
-		[]int{13, 3, 6, 7},
-		[]int{15,14,12,16},
+	for i := 0; i < 32; i++ {
+		go func() {
+			for {
+				rand.Intn(1e9)
+			}
+		}()
 	}
-	rotate(a)
-	fmt.Println(a)
+	fmt.Println("stage 0, go num=", runtime.NumGoroutine()) // 默认两个go
 
-	fmt.Println("===== end =====")
+	time.Sleep(100 * time.Second)
+
+	// fmt.Println("===== end =====")
 }
 
 func rotate(matrix [][]int) {
