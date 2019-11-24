@@ -36,7 +36,7 @@
 func searchRange(nums []int, target int) []int {
 	ret := []int{-1, -1}
 	n := len(nums)
-  if n <= 0 {
+	if n <= 0 {
 		return ret
 	}
 	left := 0
