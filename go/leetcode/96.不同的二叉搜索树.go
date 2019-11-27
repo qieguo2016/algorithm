@@ -31,15 +31,15 @@
  */
 func numTrees(n int) int {
     if n < 2 {
-			return 1
-		}
-		if n == 2 {
-			return 2
-		}
-		count := 0
-		for i := 0; i < n; i++ {
-			count += numTrees(i) * numTrees(n-i-1)
-		}
-		return count
+		return 1
+	}
+	if n == 2 {
+		return 2
+	}
+	count := 0
+	for i := 0; i < n; i++ {
+		count += numTrees(i) * numTrees(n-i-1)
+	}
+	return count
 }
 
