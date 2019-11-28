@@ -29,6 +29,7 @@
  * ⁠  2     1         2                 3
  * 
  */
+// 卡塔兰数
 func numTrees(n int) int {
     if n < 2 {
 		return 1

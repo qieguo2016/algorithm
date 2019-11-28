@@ -38,7 +38,7 @@
  *
  */
 
-package leetcode
+// package leetcode
 
 // @lc code=start
 /**
