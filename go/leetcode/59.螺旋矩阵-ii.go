@@ -27,7 +27,7 @@
  *
  */
 
-package leetcode
+// package leetcode
 
 // @lc code=start
 func generateMatrix(n int) [][]int {
