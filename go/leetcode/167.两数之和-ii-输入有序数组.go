@@ -33,7 +33,7 @@
  */
 
 // 双指针解法，头尾各一个指针，分别向中间遍历
-package leetcode
+// package leetcode
 
 // @lc code=start
 func twoSum(numbers []int, target int) []int {
