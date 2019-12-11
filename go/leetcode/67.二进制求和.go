@@ -30,7 +30,7 @@
  */
 
 // 注意进位
-package leetcode
+// package leetcode
 
 // @lc code=start
 func addBinary(a string, b string) string {
