@@ -33,7 +33,7 @@
  */
 
 // 先规划空间然后从后往前元素进去
-package leetcode
+// package leetcode
 
 // @lc code=start
 func merge(nums1 []int, m int, nums2 []int, n int) {
