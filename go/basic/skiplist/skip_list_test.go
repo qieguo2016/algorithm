@@ -1,4 +1,4 @@
-package base
+package skiplist
 
 import (
 	"encoding/json"

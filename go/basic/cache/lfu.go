@@ -1,4 +1,4 @@
-package base
+package cache
 
 // LFUCache 基于内存实现
 // 原理：map结构按照kv存储数据，双向链表保存节点使用频率

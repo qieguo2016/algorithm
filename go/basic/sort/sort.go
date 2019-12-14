@@ -1,4 +1,4 @@
-package base
+package sort
 
 // BubbleSort 冒泡排序
 // 冒泡排序，更贴切的形容应该是沉底排序，每一轮内循环就是最大数沉底了。

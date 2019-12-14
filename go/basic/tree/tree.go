@@ -1,4 +1,4 @@
-package base
+package sort
 
 // BuildDictTree 字典树
 func BuildDictTree(arr []string) map[string]interface{} {
