@@ -47,6 +47,7 @@ golang源码的双向链表实现(代码在container/list/)亮点：
 - [LeetCode](#LeetCode)
 - [设计模式](#design)
 - [排序相关](#sort)
+- [动态规划](#dp)
 - [递归相关](#recursive)
 - [数组相关](#array)
 - [其他](#other)
@@ -84,6 +85,10 @@ js实现：
 - [阶梯问题](/js/recursive.js#L10)
 - [链式函数](/js/recursive.js#L36)
 - [汉诺塔问题](/js/recursive.js#L47)
+
+### [动态规划](/go/basic/dp)
+
+- [最大连续子串和](/go/basic/dp/dp.go#L3)
 
 ### [Array](/js/array.js)
 
