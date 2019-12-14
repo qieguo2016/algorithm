@@ -4,31 +4,9 @@ import (
 	"fmt"
 	"runtime"
 
-	"sync"
 	"testing"
 	"time"
 )
-
-type Single struct {
-	Value int32
-}
-
-var i int32
-var s *Single
-
-var _ = new(sync.Once)
-var once = new(Once)
-
-// 获取全局单例
-func GetGlobalSingle() *Single {
-	once.Do(func() {
-		s = &Single{
-			Value: i,
-		}
-		i++ // 方便检查是否单例
-	})
-	return s
-}
 
 func TestGlobalSingle(t *testing.T) {
 	n := runtime.NumCPU()
