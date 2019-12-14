@@ -79,7 +79,7 @@ js实现：
 - [mergeSort：归并排序](/js/sort.js#L159)
 - [heapSort：堆排序](/js/sort.js#L192)
 
-### recursive [recursive.js](/md/递归.md)
+### [recursive](/md/递归.md)
 
 - [阶梯问题](/js/recursive.js#L10)
 - [链式函数](/js/recursive.js#L36)
@@ -87,12 +87,12 @@ js实现：
 
 ### [Array](/js/array.js)
 
-- indexOfArray：数组子串位置查询
-- arrayFilter：数组筛选
-- arrayUnique: 数组去重
-- combineArray: 数组归并排序
-- longestSubArray: 数组最长无重复子串查找
-- longestSubArrayHash: 利用哈希表去重的数组最长无重复子串查找
+- [indexOfArray：数组子串位置查询](/js/array.js#L16)
+- [arrayFilter：数组筛选](/js/array.js#L41)
+- [arrayUnique: 数组去重](/js/array.js#L74)
+- [combineArray: 数组归并排序](/js/array.js#L118)
+- [longestSubArray: 数组最长无重复子串查找](/js/array.js#L148)
+- [longestSubArrayHash: 利用哈希表去重的数组最长无重复子串查找](/js/array.js#L178)
 
 ### other
 
