@@ -72,12 +72,15 @@
  * 输出: false
  * 
  */
+
+var m1 = "*"[0]
+var m2 = "."[0]
 func isMatch(s string, p string) bool {
 	if len(p) == 0 {
 		return len(s) == 0
 	}
-	if (len(p) > 1 && p[1] == "*"[0]) {
-		return isMatch(s, p[2:]) || (len(s) > 0 && (s[0] == p[0] || p[0] == "."[0]) && isMatch(s[1:], p))
+	if (len(p) > 1 && p[1] == m1) {
+		return isMatch(s, p[2:]) || (len(s) > 0 && (s[0] == p[0] || p[0] == m2) && isMatch(s[1:], p))
 	}
-	return len(s) > 0 && (s[0] == p[0] || p[0] == "."[0]) && isMatch(s[1:], p[1:])
+	return len(s) > 0 && (s[0] == p[0] || p[0] == m2) && isMatch(s[1:], p[1:])
 }
