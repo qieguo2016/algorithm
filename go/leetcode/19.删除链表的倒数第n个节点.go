@@ -13,32 +13,29 @@
 
 // n从1开始，仅有一个元素移除返回nil
 func removeNthFromEnd(head *ListNode, n int) *ListNode {
-	if head == nil {
-		return nil
-	}
-	if n < 0 {
+	if head == nil || n < 0 {
 		return head
 	}
-	k := 1  // n从1开始，匹配
-	c := head
-	for c.Next != nil && k < n {
-		c = c.Next
+	dummy := &ListNode{Next: head}
+	k := 0
+	left := dummy
+	right := dummy
+	for right.Next != nil && k < n {
+		right = right.Next
 		k++
 	}
-	pre := &ListNode{Next: head}  // 从1开始计算，所以要预留一个空位
-	for c.Next != nil {
-		pre = pre.Next
-		c = c.Next
+	if k < n {   // n超过链表长度
+		return dummy.Next
 	}
-	if n == k {
-		if pre.Next == head { // 支持删除头部
-			return pre.Next.Next
-		}
-		node := pre.Next
-		pre.Next = pre.Next.Next
+	for right.Next != nil {
+		right = right.Next
+		left = left.Next
+	}
+	node := left.Next
+	if node != nil {
+		left.Next = node.Next
 		node.Next = nil
-		return head
 	}
-	return nil
+	return dummy.Next
 }
 
