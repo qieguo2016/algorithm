@@ -67,6 +67,7 @@
  *     Next *ListNode
  * }
  */
+
 func splitListToParts(root *ListNode, k int) []*ListNode {
 	ret := make([]*ListNode, k)
 	cur := root
@@ -75,17 +76,24 @@ func splitListToParts(root *ListNode, k int) []*ListNode {
 		cur = cur.Next
 		l++
 	}
-	a := l / k
-	b := l % k
-	j := 0   // 链表数组
-	i := 0
-	for cur != nil {
-		if j * a < i {
-			
+	per := l / k
+	les := l % k
+	cur = root
+	for i := 0; i < k; i++ {
+		ret[i] = cur
+		pre := &ListNode{Next: cur}
+		j := 0
+		for pre.Next != nil && j < per {
+			pre = pre.Next
+			j++
 		}
-		ret[j] = append(ret[j], cur)
-		cur = cur.Next
-		i++
+		if pre.Next != nil && les > 0 {
+			pre = pre.Next
+			les--
+		}
+		tmp := pre.Next
+		pre.Next = nil
+		cur = tmp
 	}
 	return ret
 }
