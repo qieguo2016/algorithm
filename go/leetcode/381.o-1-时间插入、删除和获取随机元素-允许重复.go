@@ -51,6 +51,11 @@
  *
  */
 
+// index数组存val数组，用来做随机
+// map中的k是val，v是各个val在index数组中的位置（同一个val值有多个）
+// 删除某个数的时候，如果某个值没了，清空map的v，否则删除v中的kv pair
+// 为了不调整index数组，删除的时候可以将目标位与数组尾交换，然后数组尾。
+
 // @lc code=start
 import (
 	"math/rand"
