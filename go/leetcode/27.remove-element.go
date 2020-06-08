@@ -56,17 +56,15 @@
  *
  *
  */
+
+// 双指针，不断将符合的值交换到前面
 func removeElement(nums []int, val int) int {
 	i := 0
-	for {
-		if i > len(nums)-1 {
-			break
-		}
-		if nums[i] == val {
-			nums = append(nums[:i], nums[i+1:]...)
-			continue
-		}
-		i++
-	}
-	return len(nums)
+    for j := 0; j < len(nums); j++ {
+        if (nums[j] != val) {
+            nums[i] = nums[j]
+            i++
+        }
+    }
+    return i
 }
