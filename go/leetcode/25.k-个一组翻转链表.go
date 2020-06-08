@@ -44,7 +44,7 @@
  */
 
 // 原地反转(from, to)之间的链表，不包含from/to
-func reverseRange(from *ListNode, to *ListNode) {
+func reverseRange(from *ListNode, to *ListNode) *ListNode {
 	cur := from.Next
 	for cur != nil && cur.Next != to {
 		next := cur.Next  // 2
@@ -52,22 +52,22 @@ func reverseRange(from *ListNode, to *ListNode) {
 		next.Next = from.Next  // 213
 		from.Next = next  // h213
 	}
+	return cur
 }
 
 func reverseKGroup(head *ListNode, k int) *ListNode {
 	dummy := &ListNode{}
 	dummy.Next = head
-	curHead := dummy  // h
-	cur := dummy.Next  // 1
-	n := 1
-	for cur != nil {  // 不判断 cur.Next != nil，为了多走一步
-		cur = cur.Next  // 2, nil
-		if n % k == 0 {  // 1
-			tmp := curHead.Next
-			reverseRange(curHead, cur)  // 
-			curHead = tmp  // 
+	left := dummy  // h
+	right := dummy.Next  // 1
+	n := 0
+	for right != nil {  // 不判断 right.Next != nil，为了多走一步
+		right = right.Next  // 2, nil
+		n++
+		if n >= k {  // 1
+			left = reverseRange(left, right)  // 
+			n = 0
 		}
-		n++  // 2
 	}
 	return dummy.Next
 }
