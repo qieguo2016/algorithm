@@ -28,8 +28,9 @@
  * 
  */
 
+// 树的根节点是左括号，层数是3层，求路径集合，终止条件：左右数递减到0，或者右节点比左节点多
 func helper(left int, right int, out string, res *[]string) {
-	if left > right {
+	if left > right {  // 左剩余比右多，也就是右节点多了，没法匹配
 		return
 	}
 	if left == 0 && right == 0 {
@@ -44,6 +45,7 @@ func helper(left int, right int, out string, res *[]string) {
 	}
 }
 
+// 组合题目一般用递归，组合一般可以看成是树结构，用dfs、bfs配合规则求解
 func generateParenthesis(n int) []string {
 	res := []string{}
 	helper(n, n, "", &res)
