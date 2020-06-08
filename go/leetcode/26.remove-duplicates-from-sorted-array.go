@@ -53,8 +53,9 @@
  */
 func removeDuplicates(nums []int) int {
 	i := 0
+	l := 0
+	mi := len(nums) - 1
 	for {
-		mi := len(nums) - 1
 		if i > mi {
 			break
 		}
@@ -65,11 +66,11 @@ func removeDuplicates(nums []int) int {
 			}
 		}
 		if j != i+1 {
-			// fmt.Println(nums, i+1, nums[:i+1], j, nums[j:])
-			nums = append(nums[:i+1], nums[j:]...)
-		} else {
-			i++
+			copy(nums[i+1:], nums[j:])
+			mi -= j-i-1
 		}
+		i++
+		l++
 	}
-	return len(nums)
+	return l
 }
