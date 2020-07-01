@@ -1,5 +1,11 @@
 package sort
 
+func swap(arr []int, i int, j int) {
+	tmp := arr[i]
+	arr[i] = arr[j]
+	arr[j] = tmp
+}
+
 // BubbleSort 冒泡排序
 // 冒泡排序，更贴切的形容应该是沉底排序，每一轮内循环就是最大数沉底了。
 func BubbleSort(arr []int) []int {
@@ -32,28 +38,6 @@ func SelectSort(arr []int) []int {
 		swap(arr, maxIndex, j-1)
 	}
 	return arr
-}
-
-// QuickSort 非原地快排
-// 取第一个元素为基准将数组分为左右两个数组，然后分别递归左右数组，最后进行合并
-func QuickSort(arr []int) []int {
-	if len(arr) <= 1 {
-		return arr
-	}
-	left := []int{}
-	right := []int{}
-	datum := arr[0]
-	for i := 1; i < len(arr); i++ {
-		if arr[i] < datum {
-			left = append(left, arr[i])
-		} else {
-			right = append(right, arr[i])
-		}
-	}
-	left = QuickSort(left)
-	left = append(left, datum)
-	right = QuickSort(right)
-	return append(left, right...)
 }
 
 // QuickSortInPlace 原地快排
@@ -90,4 +74,31 @@ func QuickSortInPlace(target []int) []int {
 	return quickSortInPlace(target, 0, len(target)-1)
 }
 
-//
+func QuickSort(arr []int) {
+	var quickSort func(array []int, start, end int)
+	quickSort = func(array []int, start, end int) {
+		if len(array) <= 1 || start >= end {
+			return
+		}
+		i := start
+		j := end
+		k := array[(end-start)/2+start]
+		for i < j {
+			for array[i] < k {
+				i++
+			}
+			for array[j] > k {
+				j--
+			}
+			if i > j {
+				break
+			}
+			arr[i], arr[j] = arr[j], arr[i]
+			i++
+			j--
+		}
+		quickSort(array, start, j)
+		quickSort(array, i, end)
+	}
+	quickSort(arr, 0, len(arr)-1)
+}

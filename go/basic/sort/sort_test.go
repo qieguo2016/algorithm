@@ -27,29 +27,15 @@ func isArraySort(target []int) bool {
 }
 
 func TestQuickSort(t *testing.T) {
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 20; i++ {
 		arr := makeRandomArray(10)
 		fmt.Printf("origin arr=%v\n", arr)
-		ret := QuickSort(arr)
-		isSort := isArraySort(ret)
+		QuickSort(arr)
+		isSort := isArraySort(arr)
 		if !isSort {
-			t.Errorf("sort fail, ret=%v\n", ret)
+			t.Errorf("sort fail, arr=%v\n", arr)
 			return
 		}
-		fmt.Printf("sort success, ret=%v\n", ret)
-	}
-}
-
-func TestQuickSortInPlace(t *testing.T) {
-	for i := 0; i < 10; i++ {
-		arr := makeRandomArray(10)
-		fmt.Printf("origin arr=%v\n", arr)
-		ret := QuickSortInPlace(arr)
-		isSort := isArraySort(ret)
-		if !isSort {
-			t.Errorf("sort fail, ret=%v\n", ret)
-			return
-		}
-		fmt.Printf("sort success, ret=%v\n", ret)
+		fmt.Printf("sort success, arr=%v\n", arr)
 	}
 }
