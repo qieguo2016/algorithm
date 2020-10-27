@@ -51,7 +51,7 @@ func permuteDFS(nums *[]int, level int, visited *[]bool, out *[]int, res *[][]in
 			continue
 		}
 		(*visited)[i] = true
-		*out = append(*out, (*nums)[i])
+		*out = append(*out, (*nums)[i])  
 		permuteDFS(nums, level+1, visited, out, res)
 		*out = (*out)[:len(*out)-1]
 		(*visited)[i] = false
