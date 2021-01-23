@@ -11,14 +11,25 @@
  * }
  */
 
+// func reverseList(head *ListNode) *ListNode {
+// 	dummy := &ListNode{}
+// 	dummy.Next = head
+// 	for head != nil && head.Next != nil {
+// 		n := head.Next
+// 		head.Next = head.Next.Next
+// 		n.Next = dummy.Next
+// 		dummy.Next = n
+// 	}
+// 	return dummy.Next
+// }
+
+// 递归实现，借助函数调用栈实现
 func reverseList(head *ListNode) *ListNode {
-	dummy := &ListNode{}
-	dummy.Next = head
-	for head != nil && head.Next != nil {
-		n := head.Next
-		head.Next = head.Next.Next
-		n.Next = dummy.Next
-		dummy.Next = n
+	if head == nil || head.Next == nil {
+		return head
 	}
-	return dummy.Next
+	last := reverseList(head.Next) // 用递归找到最后一个
+	head.Next.Next = head // 4>3  3>2
+	head.Next = nil // 3>nil 2>nil
+	return last
 }
