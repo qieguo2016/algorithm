@@ -78,15 +78,18 @@ class Solution {
         if (root == null) {
             return root;
         }
-        if (root.next != null && root.right != null) {
-            root.right.next = root.next.left;
-        }
-        if (root.left != null) {
-            root.left.next = root.right;
-        }
-        connect(root.left);
-        connect(root.right);
+        connectNode(root.left, root.right);
         return root;
+    }
+
+    public void connectNode(Node n1, Node n2) {
+        if (n1 == null || n2 == null) {
+            return;
+        }
+        n1.next = n2;
+        connectNode(n1.left, n1.right);
+        connectNode(n2.left, n2.right);
+        connectNode(n1.right, n2.left);
     }
 }
 // @lc code=end
