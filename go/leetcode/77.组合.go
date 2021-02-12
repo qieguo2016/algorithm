@@ -43,7 +43,7 @@ func dfs(n int, k int, out *[]int, res *[][]int) {
 		*res = append(*res, append([]int{}, (*out)...))
 		return
 	}
-	for i := n; i > 0; i-- {
+	for i := n; i >= k; i-- {
 		*out = append(*out, i)
 		dfs(i-1, k-1, out, res)
 		*out = (*out)[:len(*out)-1]
