@@ -37,13 +37,13 @@ func permuteUnique(nums []int) [][]int {
 	visited := make([]bool, len(nums))
 	out := []int{}
 	res := [][]int{}
-	permuteDFS(&nums, 0, &visited, &out, &res)
+	permuteDFS(&nums, &visited, &out, &res)
 	return res
 }
 
 // 深度优先递归，通过访问标记数组去重
-func permuteDFS(nums *[]int, level int, visited *[]bool, out *[]int, res *[][]int) {
-	if level == len(*nums) {
+func permuteDFS(nums *[]int, visited *[]bool, out *[]int, res *[][]int) {
+	if len(*out) == len(*nums) {
 		*res = append(*res, append([]int{}, (*out)...))  // 复制值
 		return 
 	}
@@ -52,11 +52,16 @@ func permuteDFS(nums *[]int, level int, visited *[]bool, out *[]int, res *[][]in
 			continue
 		}
 		if (i > 0 && (*nums)[i] == (*nums)[i-1] && !(*visited)[i-1]) {
+			// 用多叉树来描述解的空间：
+			//    a0    a1(跳过)   b
+			//   a1 b           a0 a1(跳过)
+			//  b    a1        a1  
+			// 横向第二个相同元素直接跳过，因为前面已经走过一次了，或者说a0/a1这两颗子树完全一样
 			continue
 		}
 		(*visited)[i] = true
 		*out = append(*out, (*nums)[i])
-		permuteDFS(nums, level+1, visited, out, res)
+		permuteDFS(nums, visited, out, res)
 		*out = (*out)[:len(*out)-1]
 		(*visited)[i] = false
 	}
