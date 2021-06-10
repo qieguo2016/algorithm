@@ -44,7 +44,7 @@
 // 使用hash记录words及对应次数，按子串组合长度分段遍历目标字符串，判断是否可以由words组成
 func findSubstring(s string, words []string) []int {
 	ret := []int{}
-  if len(words) <= 0 {
+  	if len(words) <= 0 {
 		return ret
 	}
 	m := len(words)
