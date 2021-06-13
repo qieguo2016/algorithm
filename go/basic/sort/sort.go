@@ -55,13 +55,13 @@ func QuickSortInPlace(target []int) []int {
 		j := right
 		// 以双指针相遇地将数组分割成两部分，将两侧分布不对的元素互换
 		for i < j {
-			// 直接找到比基准小的元素
+			// 直接找到比基准小的元素, 基准放右侧
 			for i < j && arr[j] >= datum {
 				j--
 			}
 			arr[i] = arr[j]
-			// 直接找到比基准大的元素
-			for i < j && arr[i] <= datum {
+			// 直接找到比基准大的元素，<表示不要基准
+			for i < j && arr[i] < datum {
 				i++
 			}
 			arr[j] = arr[i]
@@ -87,7 +87,7 @@ func QuickSort(arr []int) {
 			for array[i] < k {
 				i++
 			}
-			for array[j] > k {
+			for array[j] >= k {
 				j--
 			}
 			if i > j {
