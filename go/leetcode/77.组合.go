@@ -14,9 +14,9 @@
  * Testcase Example:  '4\n2'
  *
  * 给定两个整数 n 和 k，返回 1 ... n 中所有可能的 k 个数的组合。
- * 
+ *
  * 示例:
- * 
+ *
  * 输入: n = 4, k = 2
  * 输出:
  * [
@@ -27,27 +27,35 @@
  * ⁠ [1,3],
  * ⁠ [1,4],
  * ]
- * 
+ *
  */
 
 // @lc code=start
 func combine(n int, k int) [][]int {
-	out := []int{}
-	res := [][]int{}
-	dfs(n, k, &out, &res)
-	return res
+	s := &solution{
+		out: []int{},
+		res: [][]int{},
+	}
+	s.call(n, k)
+	return s.res
 }
 
-func dfs(n int, k int, out *[]int, res *[][]int) {
+type solution struct {
+	out []int
+	res [][]int
+}
+
+func (s *solution) call(n int, k int) {
 	if k <= 0 {
-		*res = append(*res, append([]int{}, (*out)...))
+		s.res = append(s.res, append([]int{}, s.out...))
 		return
 	}
 	for i := n; i >= k; i-- {
-		*out = append(*out, i)
-		dfs(i-1, k-1, out, res)
-		*out = (*out)[:len(*out)-1]
+		s.out = append(s.out, i)
+		s.call(i-1, k-1)
+		s.out = s.out[:len(s.out)-1]
 	}
 }
+
 // @lc code=end
 

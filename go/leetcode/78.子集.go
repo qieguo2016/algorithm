@@ -20,22 +20,29 @@
 
 // 用回溯法，组合模式来做
 func subsets(nums []int) [][]int {
-	result := [][]int{}
-	path := []int{}
-	helper(nums, &result, &path, 0)
-	return result
+	s := &solution{
+		res:  [][]int{},
+		path: []int{},
+	}
+	s.call(nums, 0)
+	return s.res
 }
 
-func helper(nums []int, result *[][]int, path *[]int, start int) {
+type solution struct {
+	path []int
+	res  [][]int
+}
+
+func (s *solution) call(nums []int, start int) {
 	if start > len(nums) {
 		return
 	}
-	
-	*result = append(*result, append([]int{}, (*path)...))
+
+	s.res = append(s.res, append([]int{}, s.path...))
 
 	for i := start; i < len(nums); i++ {
-		*path = append(*path, nums[i])
-		helper(nums, result, path, i+1)
-		*path = (*path)[:len(*path)-1]
+		s.path = append(s.path, nums[i])
+		s.call(nums, i+1)
+		s.path = s.path[:len(s.path)-1]
 	}
 }
