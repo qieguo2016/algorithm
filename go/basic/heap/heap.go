@@ -2,6 +2,8 @@ package heap
 
 import (
 	"sort"
+
+	"github.com/qieguo2016/algorithm/go/basic/util"
 )
 
 // SmallRootDown 小根堆向下调整
@@ -23,7 +25,7 @@ func SmallRootDown(target []int, from int, to int) {
 	}
 
 	// 父节点取小节点
-	swap(target, smaller, parent)
+	util.Swap(target, smaller, parent)
 	SmallRootDown(target, parent, to)
 }
 

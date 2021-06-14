@@ -3,6 +3,8 @@ package heap
 import (
 	"fmt"
 	"testing"
+
+	"github.com/qieguo2016/algorithm/go/basic/util"
 )
 
 func printHeap(arr []int) {
@@ -26,7 +28,7 @@ func printHeap(arr []int) {
 
 func TestSmallRootHeap(t *testing.T) {
 	for i := 0; i < 2; i++ {
-		arr := makeRandomArray(7)
+		arr := util.MakeRandomArray(7)
 		fmt.Printf("origin arr=%v\n", arr)
 		NewSmallRootHeap(arr)
 		fmt.Printf("heap arr=%v\n", arr)
