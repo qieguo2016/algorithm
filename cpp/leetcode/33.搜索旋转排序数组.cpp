@@ -74,12 +74,6 @@ public:
 
     int left = 0, right = nums.size() - 1;
     while (left <= right) {
-      if (nums[left] == target) {
-        return left;
-      }
-      if (nums[right] == target) {
-        return right;
-      }
       int mid = left + (right - left) / 2;
       if (nums[mid] == target) {
         return mid;
@@ -90,9 +84,8 @@ public:
         } else {
           left = mid + 1;
         }
-      } else //[4,5,6,0,1,2,3]
-      {
-        if (target >= nums[mid] && target < nums[right]) {
+      } else {
+        if (target > nums[mid] && target <= nums[right]) {
           left = mid + 1;
         } else {
           right = mid - 1;
