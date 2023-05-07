@@ -53,22 +53,27 @@
  *
  */
 
+#include <algorithm>
+#include <array>
+#include <functional>
 #include <queue>
+#include <utility>
 #include <vector>
-
 // @lc code=start
 class Solution {
   using pii = std::pair<int, int>;
 
- public:
+public:
   int trapRainWater(std::vector<std::vector<int>> &heightMap) {
+    int res = 0;
     if (heightMap.size() < 3 || heightMap[0].size() < 3) {
-      return 0;
+      return res;
     }
-    std::priority_queue<pii, std::vector<pii>, std::greater<pii>> q;
     int m = heightMap.size();
     int n = heightMap[0].size();
     std::vector<bool> visited(m * n, false);
+    std::priority_queue<pii, std::vector<pii>, std::greater<pii>> q;
+
     // check edge
     for (int i = 0; i < m; i++) {
       for (int j = 0; j < n; j++) {
@@ -80,23 +85,20 @@ class Solution {
       }
     }
 
-    // check all block
-    int res = 0;
-    int dir[] = {-1, 0, 1, 0, -1};  // left/bottom/right/top
+    int dirs[] = {-1, 0, 1, 0, -1};
+    // check every grid
     while (!q.empty()) {
-      pii cur = q.top();
+      auto cur = q.top();
       q.pop();
-      for (int k = 0; k < 4; k++) {
-        int x = cur.second / n + dir[k];
-        int y = cur.second % n + dir[k + 1];
-        int xyi = x * n + y;
-        if (x >= 0 && x < m && y >= 0 && y < n &&
-            !visited[xyi]) {  // not edge
-          if (heightMap[x][y] < cur.first) {
-            res += cur.first - heightMap[x][y];
-          }
-          visited[xyi] = true;
-          q.push({std::max(heightMap[x][y], cur.first), xyi});
+
+      for (int k = 0; k < 4; k++) { // check left/down/right/up
+        int x = cur.second / n + dirs[k];
+        int y = cur.second % n + dirs[k + 1];
+        int idx = x * n + y;
+        if (x >= 0 && x < m && y >= 0 && y < n && !visited[idx]) {
+          res += cur.first > heightMap[x][y] ? cur.first - heightMap[x][y] : 0;
+          visited[idx] = true;
+          q.push({std::max(heightMap[x][y], cur.first), idx});
         }
       }
     }
