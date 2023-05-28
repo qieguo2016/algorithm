@@ -73,9 +73,8 @@ public:
     int inc = 1, dec = 0, pre = 1; // 递增递减区间个数，pre是前一个同学的糖果数
     for (int i = 1; i < ratings.size(); i++) {
       if (ratings[i] >= ratings[i - 1]) {
-        pre = ratings[i] == ratings[i - 1]
-                  ? 1
-                  : 1 + pre; // 相等也是不大于，可以只分1个
+        // 相等也是不大于，可以只分1个
+        pre = ratings[i] == ratings[i - 1] ? 1 : 1 + pre;
         ret += pre;
         dec = 0; // 重置递减区间
         inc = pre;
